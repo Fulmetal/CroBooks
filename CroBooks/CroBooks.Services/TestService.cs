@@ -17,11 +17,18 @@ namespace CroBooks.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<TestDto> GetTest()
+        public async Task<List<TestDto>> GetTest()
         {
             var test = await testRepository.GetAllAsync();
+
+            List<TestDto> result = new List<TestDto>();
+
+            foreach (var item in test)
+            {
+                result.Add(new TestDto() { Message = item.Id.ToString() });
+            }
             
-            return new TestDto() { Message = "Hello world!" };
+            return result;
         }
 
         public async Task<TestDto> InsertTest()

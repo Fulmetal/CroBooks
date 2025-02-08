@@ -4,7 +4,7 @@ namespace CroBooks.Services.Interfaces
 {
     public interface ITestService
     {
-        Task<TestDto> GetTest();
+        Task<List<TestDto>> GetTest();
         Task<TestDto> InsertTest();
     }
 }

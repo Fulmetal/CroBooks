@@ -22,6 +22,8 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.MigrateDatabase();
+
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
 

@@ -16,7 +16,7 @@ namespace CroBooks.ApiService.Controllers
         }
 
         [HttpGet]
-        public async Task<TestDto> Get()
+        public async Task<List<TestDto>> Get()
         {
             var result = await this.testService.GetTest();
             return result;
