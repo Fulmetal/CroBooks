@@ -3,13 +3,11 @@ using System.Text.Json;
 
 namespace CroBooks.Web.HttpClients
 {
-    public class ApiHttpClient(HttpClient httpClient)
+    public class CompanyHttpClient(HttpClient httpClient)
     {
-        private static readonly string controllerPath = "company";
-
         public async Task<CompanyDto> GetCompany(int id)
         {
-            var response = await httpClient.GetAsync($"{controllerPath}/{id}");
+            var response = await httpClient.GetAsync($"/{id}");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<CompanyDto>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -21,7 +19,7 @@ namespace CroBooks.Web.HttpClients
 
         public async Task<List<CompanyDto>> GetCompanies()
         {
-            var response = await httpClient.GetAsync($"{controllerPath}");
+            var response = await httpClient.GetAsync("/");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<List<CompanyDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -34,7 +32,7 @@ namespace CroBooks.Web.HttpClients
         public async Task<CompanyDto> AddCompany(CompanyDto dto)
         {
             var json = JsonSerializer.Serialize(dto);
-            var response = await httpClient.PostAsJsonAsync($"{controllerPath}", json);
+            var response = await httpClient.PostAsJsonAsync($"/", json);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonSerializer.Deserialize<CompanyDto>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
