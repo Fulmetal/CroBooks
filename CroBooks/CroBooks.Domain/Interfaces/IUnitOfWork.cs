@@ -1,4 +1,5 @@
 ﻿using CroBooks.Domain.Companies;
+using CroBooks.Domain.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace CroBooks.Domain.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         ICompanyRepository Companies { get; }
+        IUserRepository Users { get; }
         Task<int> CommitAsync();
     }
 }

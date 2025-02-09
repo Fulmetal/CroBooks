@@ -1,5 +1,6 @@
 ﻿using CroBooks.Domain.Companies;
 using CroBooks.Domain.Interfaces;
+using CroBooks.Domain.Users;
 using CroBooks.Infrastructure.Repositories;
 
 namespace CroBooks.Infrastructure
@@ -7,7 +8,8 @@ namespace CroBooks.Infrastructure
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        private CompanyRepository? _companyRepository;
+        private CompanyRepository _companyRepository = default!;
+        private UserRepository userRepository = default!;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -15,6 +17,7 @@ namespace CroBooks.Infrastructure
         }
 
         public ICompanyRepository Companies => _companyRepository ??= new CompanyRepository(_context);
+        public IUserRepository Users => userRepository ??= new UserRepository(_context);
 
         public async Task<int> CommitAsync()
         {

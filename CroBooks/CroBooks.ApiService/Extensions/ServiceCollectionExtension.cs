@@ -1,5 +1,6 @@
 ﻿using CroBooks.Domain.Companies;
 using CroBooks.Domain.Interfaces;
+using CroBooks.Domain.Users;
 using CroBooks.Infrastructure;
 using CroBooks.Infrastructure.Repositories;
 using CroBooks.Services;
@@ -31,7 +32,6 @@ namespace CroBooks.ApiService.Extensions
             });
 
             services.AddScoped<Func<ApplicationDbContext?>>(provider => () => provider.GetService<ApplicationDbContext>());
-            services.AddScoped<DbFactory>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Inject IDbConnection, with implementation from SqlConnection class.
@@ -43,6 +43,7 @@ namespace CroBooks.ApiService.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }
@@ -50,6 +51,7 @@ namespace CroBooks.ApiService.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

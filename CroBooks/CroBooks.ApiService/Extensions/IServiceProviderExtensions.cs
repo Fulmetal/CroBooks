@@ -1,8 +1,6 @@
 ﻿using CroBooks.Infrastructure;
 //using CroBooks.Infrastructure.Seeders;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace CroBooks.ApiService.Extensions;
 
