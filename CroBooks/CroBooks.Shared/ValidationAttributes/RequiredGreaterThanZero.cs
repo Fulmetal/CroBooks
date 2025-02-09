@@ -4,7 +4,7 @@ namespace CroBooks.Shared.ValidationAttributes
 {
     public class RequiredGreaterThanZero : ValidationAttribute
     {
-        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value == null)
             {

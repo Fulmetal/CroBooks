@@ -12,83 +12,84 @@ namespace CroBooks.Infrastructure;
 
 public class Repository<T, TKey> : IRepository<T, TKey> where T : class
 {
-    private readonly DbFactory _dbFactory;
+    protected readonly ApplicationDbContext _context;
     private readonly AuthenticationStateProvider _authenticationStateProvider;
-    private DbSet<T>? _dbSet;
+    private DbSet<T> _dbSet;
 
-    public Repository(DbFactory dbFactory, AuthenticationStateProvider authenticationStateProvider)
+    public Repository(ApplicationDbContext context, AuthenticationStateProvider authenticationStateProvider)
     {
-        _dbFactory = dbFactory;
+        _context = context;
+        _dbSet = _context.Set<T>();
         _authenticationStateProvider = authenticationStateProvider;
     }
 
-    public Repository(DbFactory dbFactory)
+    public Repository(ApplicationDbContext context)
     {
-        _dbFactory = dbFactory;
+        _context = context;
+        _dbSet = _context.Set<T>();
     }
-
-    protected DbSet<T> DbSet => _dbSet ?? (_dbSet = _dbFactory.DbContext.Set<T>());
 
     public async Task<T> AttachAsync(T entity)
     {
-        return DbSet.Attach(entity).Entity;
+        _dbSet.Attach(entity);
+        return await Task.FromResult(entity);
     }
 
     public async Task<long> EntityCountAsync()
     {
         if (typeof(IDeleteEntity).IsAssignableFrom(typeof(T)))
-            return await DbSet.Where(x => !((IDeleteEntity)x).IsDeleted).CountAsync();
+            return await _dbSet.Where(x => !((IDeleteEntity)x).IsDeleted).CountAsync();
 
-        return await DbSet.CountAsync();
+        return await _dbSet.CountAsync();
     }
 
     public async Task<bool> EntityExistsAsync(Func<T, bool> expression)
     {
         if (typeof(IDeleteEntity).IsAssignableFrom(typeof(T)))
         {
-            var r = DbSet.Where(x => !((IDeleteEntity)x).IsDeleted).AsEnumerable();
+            var r = _dbSet.Where(x => !((IDeleteEntity)x).IsDeleted).AsEnumerable();
             return r.Any(expression);
         }
 
-        return await Task.FromResult(DbSet.Any(expression));
+        return await Task.FromResult(_dbSet.Any(expression));
     }
 
     public async Task<IEnumerable<T>> GetAllAsync()
     {
         if (typeof(IDeleteEntity).IsAssignableFrom(typeof(T)))
-            return await DbSet.AsNoTracking().Where(x => !((IDeleteEntity)x).IsDeleted).ToListAsync();
+            return await _dbSet.AsNoTracking().Where(x => !((IDeleteEntity)x).IsDeleted).ToListAsync();
 
-        return await DbSet.AsNoTracking().ToListAsync();
+        return await _dbSet.AsNoTracking().ToListAsync();
     }
 
     public async Task<IEnumerable<T>> GetAllDeletedAsync()
     {
         if (typeof(IDeleteEntity).IsAssignableFrom(typeof(T)))
-            return await DbSet.AsNoTracking().Where(x => ((IDeleteEntity)x).IsDeleted).ToListAsync();
+            return await _dbSet.AsNoTracking().Where(x => ((IDeleteEntity)x).IsDeleted).ToListAsync();
 
         return new List<T>();
     }
 
     public async Task<IEnumerable<T>> GetAllIncludingDeletedAsync()
     {
-        return await DbSet.ToListAsync();
+        return await _dbSet.ToListAsync();
     }
 
     public async Task<IEnumerable<T>> SudoGetAllAsync()
     {
-        return await DbSet.AsNoTracking().ToListAsync();
+        return await _dbSet.AsNoTracking().ToListAsync();
     }
 
     public async Task<T?> FindAsync(TKey id)
     {
-        return await DbSet.FindAsync(id);
+        return await _dbSet.FindAsync(id);
     }
 
     public async Task<T> AddAsync(T entity)
     {
         if (typeof(IAuditEntity).IsAssignableFrom(typeof(T))) ((IAuditEntity)entity).CreatedDate = DateTime.UtcNow;
 
-        var newEntity = await DbSet.AddAsync(entity);
+        var newEntity = await _dbSet.AddAsync(entity);
         return newEntity.Entity;
     }
 
@@ -97,7 +98,7 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
         if (typeof(IAuditEntity).IsAssignableFrom(typeof(T)))
             foreach (var entity in list)
                 ((IAuditEntity)entity).CreatedDate = DateTime.UtcNow;
-        await DbSet.AddRangeAsync(list);
+        await _dbSet.AddRangeAsync(list);
     }
 
     public async Task DeleteAsync(TKey id)
@@ -111,11 +112,11 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
             ((IDeleteEntity)e).IsDeleted = true;
             ((IDeleteEntity)e).DeletedDate = DateTime.UtcNow;
 
-            DbSet.Update(e);
+            _dbSet.Update(e);
             return;
         }
 
-        DbSet.Remove(e);
+        _dbSet.Remove(e);
     }
 
     public async Task DeleteAsync(T e)
@@ -125,11 +126,13 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
             ((IDeleteEntity)e).IsDeleted = true;
             ((IDeleteEntity)e).DeletedDate = DateTime.UtcNow;
 
-            DbSet.Update(e);
+            _dbSet.Update(e);
+            await Task.CompletedTask;
             return;
         }
 
-        DbSet.Remove(e);
+        _dbSet.Remove(e);
+        await Task.CompletedTask;
     }
 
 
@@ -147,15 +150,15 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
         }
 
         if (typeof(IDeleteEntity).IsAssignableFrom(typeof(T)))
-            DbSet.UpdateRange(entities);
+            _dbSet.UpdateRange(entities);
         else
-            DbSet.RemoveRange(entities);
+            _dbSet.RemoveRange(entities);
     }
 
     public async Task SudoDeleteRangeAsync(List<TKey> list)
     {
         var entities = await SudoListAsync(x => list.Contains(((IEntityBase<TKey>)x).Id));
-        DbSet.RemoveRange(entities);
+        _dbSet.RemoveRange(entities);
     }
 
     public async Task RestoreAsync(T entity)
@@ -168,13 +171,13 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
         {
             ((IDeleteEntity)e).IsDeleted = false;
             ((IDeleteEntity)e).DeletedDate = null;
-            DbSet.Update(e);
+            _dbSet.Update(e);
         }
     }
 
     public async Task<IList<T>> ListAsync(Expression<Func<T, bool>> expression)
     {
-        var r = DbSet.AsNoTracking().Where(expression);
+        var r = _dbSet.AsNoTracking().Where(expression);
 
         if (typeof(IDeleteEntity).IsAssignableFrom(typeof(T))) r = r.Where(x => !((IDeleteEntity)x).IsDeleted);
 
@@ -183,21 +186,20 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
 
     public async Task<IList<T>> ListIncludingDeletedAsync(Expression<Func<T, bool>> expression)
     {
-        var r = DbSet.Where(expression);
+        var r = _dbSet.Where(expression);
 
         return await r.ToListAsync();
     }
 
     public async Task<IList<T>> SudoListAsync(Expression<Func<T, bool>> expression)
     {
-        var r = DbSet.Where(expression);
-
+        var r = _dbSet.Where(expression);
         return await r.ToListAsync();
     }
 
     public async Task<T?> SingleAsync(Expression<Func<T, bool>> expression)
     {
-        var r = DbSet.AsQueryable();
+        var r = _dbSet.AsQueryable();
 
         return await r.FirstOrDefaultAsync(expression);
     }
@@ -205,7 +207,8 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
     public async Task UpdateAsync(T entity)
     {
         if (typeof(IAuditEntity).IsAssignableFrom(typeof(T))) ((IAuditEntity)entity).UpdatedDate = DateTime.UtcNow;
-        DbSet.Update(entity);
+        _dbSet.Update(entity);
+        await Task.CompletedTask;
     }
 
     public async Task UpdateRangeAsync(List<T> list)
@@ -214,16 +217,18 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
             foreach (var e in list)
                 ((IAuditEntity)e).UpdatedDate = DateTime.UtcNow;
 
-        DbSet.UpdateRange(list);
+        _dbSet.UpdateRange(list);
+        await Task.CompletedTask;
     }
 
     public async Task UpdateRangeWithoutDateAsync(List<T> list)
     {
-        DbSet.UpdateRange(list);
+        _dbSet.UpdateRange(list);
+        await Task.CompletedTask;
     }
 
     public IQueryable<T> Queriable()
     {
-        return DbSet;
+        return _dbSet;
     }
 }

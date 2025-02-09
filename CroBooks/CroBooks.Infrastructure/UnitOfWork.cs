@@ -1,29 +1,29 @@
-﻿using CroBooks.Domain.Interfaces;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using CroBooks.Domain.Companies;
+using CroBooks.Domain.Interfaces;
+using CroBooks.Infrastructure.Repositories;
 
-namespace CroBooks.Infrastructure;
-
-public class UnitOfWork : IUnitOfWork
+namespace CroBooks.Infrastructure
 {
-    private readonly DbFactory _dbFactory;
-
-    public UnitOfWork(DbFactory dbFactory)
+    public class UnitOfWork : IUnitOfWork
     {
-        _dbFactory = dbFactory;
-    }
+        private readonly ApplicationDbContext _context;
+        private CompanyRepository? _companyRepository;
 
-    public void ClearTracker()
-    {
-        _dbFactory.DbContext.ChangeTracker.Clear();
-    }
+        public UnitOfWork(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-    public async Task<int> SaveChangesAsync()
-    {
-        return await _dbFactory.DbContext.SaveChangesAsync();
-    }
+        public ICompanyRepository Companies => _companyRepository ??= new CompanyRepository(_context);
 
-    public async Task<IDbContextTransaction> BeginTransactionAsync()
-    {
-        return await _dbFactory.DbContext.Database.BeginTransactionAsync();
+        public async Task<int> CommitAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
     }
 }

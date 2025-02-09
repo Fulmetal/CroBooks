@@ -7,19 +7,16 @@ namespace CroBooks.Services
 {
     public class CompanyService : ICompanyService
     {
-        private readonly ICompanyRepository companyRepository;
         private readonly IUnitOfWork unitOfWork;
 
-        public CompanyService(ICompanyRepository companyRepository
-            , IUnitOfWork unitOfWork)
+        public CompanyService(IUnitOfWork unitOfWork)
         {
-            this.companyRepository = companyRepository;
             this.unitOfWork = unitOfWork;
         }
 
         public async Task<CompanyDto?> GetCompany(int id)
         {
-            var company = await companyRepository.FindAsync(id);
+            var company = await unitOfWork.Companies.FindAsync(id);
             if (company == null)
             {
                 return null;
@@ -29,15 +26,15 @@ namespace CroBooks.Services
 
         public async Task<List<CompanyDto>> GetCompanies()
         {
-            var companies = await companyRepository.GetAllAsync();
+            var companies = await unitOfWork.Companies.GetAllAsync();
             return companies.Select(x => x.ToDto()).ToList();
         }
 
         public async Task<CompanyDto> AddCompany(CompanyDto dto)
         {
             var company = new Company(dto);
-            var result = await companyRepository.AddAsync(company);
-            await unitOfWork.SaveChangesAsync();
+            var result = await unitOfWork.Companies.AddAsync(company);
+            await unitOfWork.CommitAsync();
 
             return result.ToDto();
         }

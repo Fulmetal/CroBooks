@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CroBooks.ServiceDefaults\CroBooks.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\CroBooks.Shared\CroBooks.Shared.csproj" />
   </ItemGroup>
 
 </Project>

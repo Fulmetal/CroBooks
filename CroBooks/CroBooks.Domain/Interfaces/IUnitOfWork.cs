@@ -1,11 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using CroBooks.Domain.Companies;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CroBooks.Domain.Interfaces;
-
-public interface IUnitOfWork
+namespace CroBooks.Domain.Interfaces
 {
-    Task<int> SaveChangesAsync();
-
-    Task<IDbContextTransaction> BeginTransactionAsync();
-    void ClearTracker();
+    public interface IUnitOfWork : IDisposable
+    {
+        ICompanyRepository Companies { get; }
+        Task<int> CommitAsync();
+    }
 }
