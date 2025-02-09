@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Companies\" />
+    <ProjectReference Include="..\CroBooks.Shared\CroBooks.Shared.csproj" />
   </ItemGroup>
 
 </Project>

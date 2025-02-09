@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CroBooks.Domain.Tests;
+﻿using CroBooks.Domain.Companies;
+using Microsoft.EntityFrameworkCore;
 
 namespace CroBooks.Infrastructure
 {
@@ -10,6 +10,6 @@ namespace CroBooks.Infrastructure
         {
         }
 
-        public DbSet<Test> Tests { get; set; } = null!;
+        public DbSet<Company> Companies { get; set; } = null!;
     }
 }

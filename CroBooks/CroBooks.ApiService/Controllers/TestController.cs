@@ -8,25 +8,25 @@ namespace CroBooks.ApiService.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly ITestService testService;
+        //private readonly ITestService testService;
 
-        public TestController(ITestService testService)
-        {
-            this.testService = testService;
-        }
+        //public TestController(ITestService testService)
+        //{
+        //    this.testService = testService;
+        //}
 
-        [HttpGet]
-        public async Task<List<TestDto>> Get()
-        {
-            var result = await this.testService.GetTest();
-            return result;
-        }
+        //[HttpGet]
+        //public async Task<List<TestDto>> Get()
+        //{
+        //    var result = await this.testService.GetTest();
+        //    return result;
+        //}
 
-        [HttpPost]
-        public async Task<TestDto> Post()
-        {
-            var result = await this.testService.InsertTest();
-            return result;
-        }
+        //[HttpPost]
+        //public async Task<TestDto> Post()
+        //{
+        //    var result = await this.testService.InsertTest();
+        //    return result;
+        //}
     }
 }

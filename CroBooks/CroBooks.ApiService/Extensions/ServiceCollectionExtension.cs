@@ -1,5 +1,5 @@
-﻿using CroBooks.Domain.Interfaces;
-using CroBooks.Domain.Tests;
+﻿using CroBooks.Domain.Companies;
+using CroBooks.Domain.Interfaces;
 using CroBooks.Infrastructure;
 using CroBooks.Infrastructure.Repositories;
 using CroBooks.Services;
@@ -34,14 +34,14 @@ namespace CroBooks.ApiService.Extensions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddTransient<ITestService, TestService>();
+            services.AddTransient<ICompanyService, CompanyService>();
 
             return services;
         }
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddTransient<ITestRepository, TestRepository>();
+            services.AddTransient<ICompanyRepository, CompanyRepository>();
 
             return services;
         }
