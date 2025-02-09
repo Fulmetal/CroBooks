@@ -17,6 +17,22 @@ namespace CroBooks.Services
             this.unitOfWork = unitOfWork;
         }
 
+        public async Task<CompanyDto?> GetCompany(int id)
+        {
+            var company = await companyRepository.FindAsync(id);
+            if (company == null)
+            {
+                return null;
+            }
+            return company.ToDto();
+        }
+
+        public async Task<List<CompanyDto>> GetCompanies()
+        {
+            var companies = await companyRepository.GetAllAsync();
+            return companies.Select(x => x.ToDto()).ToList();
+        }
+
         public async Task<CompanyDto> AddCompany(CompanyDto dto)
         {
             var company = new Company(dto);

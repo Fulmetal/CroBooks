@@ -3,11 +3,6 @@ using CroBooks.ApiService.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
-builder.Services.AddDatabase(builder.Configuration);
-builder.Services.AddServices();
-builder.Services.AddRepositories();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -16,6 +11,10 @@ builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddServices();
+builder.Services.AddRepositories();
+
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
