@@ -34,17 +34,16 @@ namespace CroBooks.ApiService.Extensions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddScoped<ITestService, TestService>();
+            services.AddTransient<ITestService, TestService>();
 
             return services;
         }
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<ITestRepository, TestRepository>();
+            services.AddTransient<ITestRepository, TestRepository>();
 
             return services;
-
         }
     }
 }

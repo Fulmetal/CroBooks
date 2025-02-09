@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
 @* Required *@
-<MudThemeProvider />
+<MudThemeProvider IsDarkMode="@_isDarkMode" />
 <MudPopoverProvider />
 
 @* Needed for dialogs *@
@@ -11,15 +11,24 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar>
+    <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        CroBooks
+        <MudText Typo="Typo.h5" Class="ml-3">Cro Books</MudText>
+        <MudSpacer />
+        <MudSwitch T="bool" Value="_isDarkMode" ValueChanged="@((e) => ToggleDarkMode(e))" 
+            ThumbIcon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
+            ThumbIconColor="@(_isDarkMode == true ? Color.Dark : Color.Dark)"
+            Color="Color.Primary">
+        </MudSwitch>
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
-    <MudDrawer Open="@_drawerOpen">
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        @Body
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+            @Body
+        </MudContainer>
     </MudMainContent>
 </MudLayout>
 
@@ -31,9 +40,15 @@
 
 @code {
     bool _drawerOpen = true;
+    bool _isDarkMode = true;
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    void ToggleDarkMode(bool value)
+    {
+        _isDarkMode = value;
     }
 }
