@@ -2,7 +2,7 @@
 
 namespace CroBooks.Shared.Dto.Request
 {
-    internal class CreateUserRequestDto
+    public class CreateUserRequestDto
     {
         [Required]
         public string FirstName { get; set; } = string.Empty;
