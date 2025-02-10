@@ -1,10 +1,6 @@
 ﻿using CroBooks.Domain.Companies;
+using CroBooks.Domain.Roles;
 using CroBooks.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CroBooks.Domain.Interfaces
 {
@@ -12,6 +8,7 @@ namespace CroBooks.Domain.Interfaces
     {
         ICompanyRepository Companies { get; }
         IUserRepository Users { get; }
+        IRolesRepository Roles { get; }
         Task<int> CommitAsync();
     }
 }

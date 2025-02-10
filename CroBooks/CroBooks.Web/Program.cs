@@ -1,6 +1,5 @@
-using CroBooks.Web;
 using CroBooks.Web.Components;
-using CroBooks.Web.HttpClients;
+using CroBooks.Web.Extensions;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +10,8 @@ builder.AddServiceDefaults();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddHttpClients();
 
 builder.Services.AddMudServices();
 

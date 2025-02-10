@@ -1,0 +1,83 @@
+﻿@using CroBooks.Shared.Dto
+@using CroBooks.Shared.Dto.Request
+@using CroBooks.Web.Components.Layout
+@using CroBooks.Web.HttpClients
+
+@page "/setup"
+@layout EmptyLayout
+
+<MudStack>
+    <MudText Typo="@Typo.h1">Cro Books</MudText>
+    <MudText Typo="@Typo.h3">Setup</MudText>
+
+    @if (!adminExists)
+    {
+
+        <MudDivider></MudDivider>
+        <MudCarousel @bind-SelectedIndex="wizardStep" Style="height:50vh;" Class="mud-width-full" ShowArrows="false" ShowBullets="true" EnableSwipeGesture="false" AutoCycle="false" TData="object">
+            <MudCarouselItem  Transition="Transition.Slide" >
+                <EditForm Model="@userRequest" OnValidSubmit="OnValidUserSubmit">
+                    <DataAnnotationsValidator />
+                    <MudCard>
+                        <MudCardHeader><MudText Typo="Typo.h5"> Create admin user</MudText></MudCardHeader>
+                        <MudCardContent>
+                            <MudTextField Variant="Variant.Text" Label="First Name*" @bind-Value="userRequest.FirstName" For="@(() => userRequest.FirstName)"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="Last Name*" @bind-Value="userRequest.LastName" For="@(() => userRequest.LastName)"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="Email*" @bind-Value="userRequest.Email" For="@(() => userRequest.Email)"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="Username*" @bind-Value="userRequest.Username" For="@(() => userRequest.Username)"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" InputType="InputType.Password" Label="Password*" @bind-Value="userRequest.Password" For="@(() => userRequest.Password)"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" InputType="InputType.Password" Label="Confirm Password*" @bind-Value="userRequest.ConfirmPassword" For="@(() => userRequest.ConfirmPassword)"></MudTextField>
+                        </MudCardContent>
+                        <MudCardActions>
+                            @if (wizardStep == 0)
+                            { 
+                                <MudButton Disabled="@userInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+                                    @if (userInsertBusy)
+                                    {
+                                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                        <MudText Class="ms-2">Processing</MudText>
+                                    }
+                                    else
+                                    {
+                                        <MudText>Create</MudText>
+                                    }
+                                </MudButton>
+                            }
+                        </MudCardActions>
+                    </MudCard>
+                </EditForm>
+            </MudCarouselItem>
+            <MudCarouselItem Transition="Transition.Slide">
+                Setup wizard 2
+            </MudCarouselItem>
+        </MudCarousel>
+    }
+</MudStack>
+
+@code {
+    [Inject] UserHttpClient UserHttpClient { get; set; } = null!;
+
+    private bool adminExists = false;
+    private CreateUserRequestDto userRequest = new() { RoleId = 1};
+    private int wizardStep = 0;
+    bool userInsertBusy = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        adminExists = await UserHttpClient.CheckAdminExists();
+        if (adminExists)
+            wizardStep = 1;
+
+    }
+
+    protected async Task OnValidUserSubmit()
+    {
+        userInsertBusy = true;
+        var result = await UserHttpClient.AddUser(userRequest);
+        userInsertBusy = false;
+        if (result != null)
+        { 
+            wizardStep++;
+        }
+    }
+}

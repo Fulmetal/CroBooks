@@ -67,10 +67,17 @@ namespace CroBooks.Services
                 Username = dto.Username,
                 Email = dto.Email,
                 Password = SecurityHelper.CreatePasswordHash(dto.Password),
+                RoleId = dto.RoleId
             };
             var result = await unitOfWork.Users.AddAsync(user);
             await unitOfWork.CommitAsync();
             return result.ToDto();
+        }
+
+        public async Task<bool> AdminCheck()
+        {
+            var exists = await unitOfWork.Users.EntityExistsAsync(x => x.Role.Name == "Admin");
+            return exists;
         }
     }
 }

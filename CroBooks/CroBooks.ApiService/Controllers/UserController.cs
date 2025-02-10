@@ -8,7 +8,6 @@ namespace CroBooks.ApiService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Produces("application/json")]
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;
@@ -73,6 +72,13 @@ namespace CroBooks.ApiService.Controllers
                     Status = StatusCodes.Status404NotFound,
                     Detail = $"Username or password invalid"
                 });
+            return Ok(result);
+        }
+
+        [HttpGet("admincheck")]
+        public async Task<IActionResult> AdminCheck()
+        {
+            var result = await this.userService.AdminCheck();
             return Ok(result);
         }
     }

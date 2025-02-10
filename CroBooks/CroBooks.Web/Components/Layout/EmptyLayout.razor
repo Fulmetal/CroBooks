@@ -1,0 +1,22 @@
+﻿@inherits LayoutComponentBase
+@rendermode InteractiveServer
+
+<MudThemeProvider IsDarkMode="@_isDarkMode" />
+<MudPopoverProvider />
+
+<MudLayout>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Small">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    bool _isDarkMode = true;
+
+    void ToggleDarkMode(bool value)
+    {
+        _isDarkMode = value;
+    }
+}

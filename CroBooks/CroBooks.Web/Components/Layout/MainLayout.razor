@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using CroBooks.Web.HttpClients
+@inherits LayoutComponentBase
 
 @* Required *@
 <MudThemeProvider IsDarkMode="@_isDarkMode" />
@@ -16,9 +17,9 @@
         <MudText Typo="Typo.h5" Class="ml-3">Cro Books</MudText>
         <MudSpacer />
         <MudSwitch T="bool" Value="_isDarkMode" ValueChanged="@((e) => ToggleDarkMode(e))" 
-            ThumbIcon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
-            ThumbIconColor="@(_isDarkMode == true ? Color.Dark : Color.Dark)"
-            Color="Color.Primary">
+        ThumbIcon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
+        ThumbIconColor="@(_isDarkMode == true ? Color.Dark : Color.Dark)"
+        Color="Color.Primary">
         </MudSwitch>
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
@@ -39,8 +40,23 @@
 </div>
 
 @code {
+    [Inject] public UserHttpClient UserHttpClient { get; set; } = null!;
+    [Inject] public CompanyHttpClient CompanyHttpClient { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+
     bool _drawerOpen = true;
     bool _isDarkMode = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var users = await UserHttpClient.GetUsers();
+        var companies = await CompanyHttpClient.GetCompanies();
+
+        if (users.Count == 0 || companies.Count == 0)
+        { 
+            NavigationManager.NavigateTo("/setup");
+        }
+    }
 
     void DrawerToggle()
     {

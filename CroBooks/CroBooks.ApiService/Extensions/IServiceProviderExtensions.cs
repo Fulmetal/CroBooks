@@ -1,5 +1,5 @@
 ﻿using CroBooks.Infrastructure;
-//using CroBooks.Infrastructure.Seeders;
+using CroBooks.Infrastructure.Seeders;
 using Microsoft.EntityFrameworkCore;
 
 namespace CroBooks.ApiService.Extensions;
@@ -17,7 +17,7 @@ public static class ServiceProviderExtensions
             context.Database.Migrate();
 
             // now that the database is up to date. Let's seed
-            //new RoleSeeder(context).SeedData();
+            new RoleSeeder(context).SeedData();
 
             await context.SaveChangesAsync();
         }
