@@ -26,5 +26,10 @@ namespace CroBooks.Web.HttpClients
         {
             return await PostAsJsonAsync<CompanyDto, CompanyDto>(dto, $"{controllerBase}/");
         }
+
+        public async Task<bool> CheckAnyCompanyExists()
+        {
+            return await GetAsync<bool>($"{controllerBase}/anycompanyexists");
+        }
     }
 }

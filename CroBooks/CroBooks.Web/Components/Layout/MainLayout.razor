@@ -40,23 +40,23 @@
 </div>
 
 @code {
-    [Inject] public UserHttpClient UserHttpClient { get; set; } = null!;
-    [Inject] public CompanyHttpClient CompanyHttpClient { get; set; } = null!;
-    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+    // [Inject] public UserHttpClient UserHttpClient { get; set; } = null!;
+    // [Inject] public CompanyHttpClient CompanyHttpClient { get; set; } = null!;
+    // [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
     bool _drawerOpen = true;
     bool _isDarkMode = true;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var users = await UserHttpClient.GetUsers();
-        var companies = await CompanyHttpClient.GetCompanies();
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var users = await UserHttpClient.GetUsers();
+    //     var companies = await CompanyHttpClient.GetCompanies();
 
-        if (users.Count == 0 || companies.Count == 0)
-        { 
-            NavigationManager.NavigateTo("/setup");
-        }
-    }
+    //     if (users.Count == 0 || companies.Count == 0)
+    //     { 
+    //         NavigationManager.NavigateTo("/setup");
+    //     }
+    // }
 
     void DrawerToggle()
     {

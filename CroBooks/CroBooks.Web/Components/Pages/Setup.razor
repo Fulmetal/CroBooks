@@ -11,7 +11,7 @@
     <MudText Typo="@Typo.h3">Setup</MudText>
 
     <MudDivider></MudDivider>
-    <MudCarousel @ref="carousel" @bind-SelectedIndex="wizardStep" Style="height:50vh;" Class="mud-width-full" ShowArrows="false" ShowBullets="false" EnableSwipeGesture="false" AutoCycle="false" TData="string">
+    <MudCarousel @ref="carousel" @bind-SelectedIndex="wizardStep" Style="height:70vh;" Class="mud-width-full" ShowArrows="false" ShowBullets="false" EnableSwipeGesture="false" AutoCycle="false" TData="string">
         <MudCarouselItem Transition="Transition.Slide">
 
             @if (adminExists)
@@ -59,21 +59,21 @@
                 <MudCard>
                     <MudCardHeader><MudText Typo="Typo.h5"> Create company</MudText></MudCardHeader>
                     <MudCardContent>
-                        <MudTextField Variant="Variant.Text" Label="Name*" @bind-Value="companyDto.Name" For="@(() => companyDto.Name)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Address*" @bind-Value="companyDto.Address" For="@(() => companyDto.Address)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Postal Code*" @bind-Value="companyDto.PostalCode" For="@(() => companyDto.PostalCode)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="City*" @bind-Value="companyDto.City" For="@(() => companyDto.City)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Country*" @bind-Value="companyDto.Country" For="@(() => companyDto.Country)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Tax Number*" @bind-Value="companyDto.TaxNumber" For="@(() => companyDto.TaxNumber)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="IBAN*" @bind-Value="companyDto.IBAN" For="@(() => companyDto.IBAN)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Registered Activity*" @bind-Value="companyDto.RegisteredActivity" For="@(() => companyDto.RegisteredActivity)"></MudTextField>
-                        <MudDatePicker Variant="Variant.Text" Label="Registration Date*" @bind-Date="companyDto.RegistrationDate" For="@(() => companyDto.RegistrationDate)"></MudDatePicker>
+                        <MudTextField Variant="Variant.Filled" Label="Name*" @bind-Value="companyDto.Name" For="@(() => companyDto.Name)"></MudTextField>
+                        <MudTextField Variant="Variant.Filled" Class="mt-2" Label="Address*" @bind-Value="companyDto.Address" For="@(() => companyDto.Address)"></MudTextField>
+                        <MudTextField Variant="Variant.Filled" Class="mt-2" Label="Postal Code*" @bind-Value="companyDto.PostalCode" For="@(() => companyDto.PostalCode)"></MudTextField>
+                        <MudTextField Variant="Variant.Filled" Class="mt-2" Label="City*" @bind-Value="companyDto.City" For="@(() => companyDto.City)"></MudTextField>
+                        <MudTextField Variant="Variant.Filled" Class="mt-2" Label="Country*" @bind-Value="companyDto.Country" For="@(() => companyDto.Country)"></MudTextField>
+                        <MudTextField Variant="Variant.Filled" Class="mt-2" Label="Tax Number*" @bind-Value="companyDto.TaxNumber" For="@(() => companyDto.TaxNumber)"></MudTextField>
+                        <MudTextField Variant="Variant.Filled" Class="mt-2" Label="IBAN*" @bind-Value="companyDto.IBAN" For="@(() => companyDto.IBAN)"></MudTextField>
+                        <MudTextField Variant="Variant.Filled" Class="mt-2" Label="Registered Activity*" @bind-Value="companyDto.RegisteredActivity" For="@(() => companyDto.RegisteredActivity)"></MudTextField>
+                        <MudDatePicker Variant="Variant.Filled" Label="Registration Date*" @bind-Date="companyDto.RegistrationDate" For="@(() => companyDto.RegistrationDate)"></MudDatePicker>
                     </MudCardContent>
                     <MudCardActions>
                         @if (wizardStep == 1)
                         {
-                            <MudButton Disabled="@userInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
-                                @if (userInsertBusy)
+                            <MudButton Disabled="@companyInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+                                @if (companyInsertBusy)
                                 {
                                     <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
                                     <MudText Class="ms-2">Processing</MudText>
@@ -81,7 +81,7 @@
                                 else
                                 {
                                     <MudText>Create</MudText>
-                                    
+
                                 }
                             </MudButton>
                         }
@@ -98,6 +98,7 @@
     [Inject] NavigationManager NavigationManager { get; set; } = null!;
 
     private bool adminExists = false;
+    private bool companyExists = false;
     private CreateUserRequestDto userRequest = new() { RoleId = 1 };
     private CompanyDto companyDto = new();
     private MudCarousel<string> carousel = null!;
@@ -108,29 +109,41 @@
     protected override async Task OnInitializedAsync()
     {
         adminExists = await UserHttpClient.CheckAdminExists();
-        if (adminExists)
-            wizardStep = 1;
+        companyExists = await CompanyHttpClient.CheckAnyCompanyExists();
+        WizardNextStep();
     }
 
     protected async Task OnValidUserSubmit()
     {
         userInsertBusy = true;
         var result = await UserHttpClient.AddUser(userRequest);
-        userInsertBusy = false;
         if (result != null)
         {
-            wizardStep++;
+            adminExists = true;
+            WizardNextStep();
         }
+        userInsertBusy = false;
     }
 
     protected async Task OnValidCompanySubmit()
     {
-        userInsertBusy = true;
+        companyInsertBusy = true;
         var result = await CompanyHttpClient.AddCompany(companyDto);
-        userInsertBusy = false;
         if (result != null)
         {
-            NavigationManager.NavigateTo("/", false);
+            companyExists = true;
+            WizardNextStep();
         }
+        companyInsertBusy = false;
+    }
+
+    protected void WizardNextStep()
+    {
+        if (companyExists)
+            wizardStep = 0;
+        if (adminExists)
+            wizardStep = 1;
+        if (adminExists && companyExists)
+            NavigationManager.NavigateTo("/home", false);
     }
 }

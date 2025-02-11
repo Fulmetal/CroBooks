@@ -63,5 +63,12 @@ namespace CroBooks.ApiService.Controllers
                 });
             return Ok(result);
         }
+
+        [HttpGet("AnyCompanyExists")]
+        public async Task<IActionResult> AnyCompanyExists()
+        {
+            var result = await this.companyService.AnyCompanyExists();
+            return Ok(result);
+        }
     }
 }

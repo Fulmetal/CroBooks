@@ -1,0 +1,31 @@
+﻿@using CroBooks.Web.Components.Layout
+@using CroBooks.Web.HttpClients
+
+@page "/"
+@layout EmptyLayout
+
+<MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Style="height: 80vh">
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" Style="height:100px;width:100px;" />
+    <MudText Typo="Typo.h1">Loading</MudText>
+</MudStack>
+
+
+@code {
+    [Inject] public UserHttpClient UserHttpClient { get; set; } = null!;
+    [Inject] public CompanyHttpClient CompanyHttpClient { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var users = await UserHttpClient.GetUsers();
+        var companies = await CompanyHttpClient.GetCompanies();
+
+        if (users.Count == 0 || companies.Count == 0)
+        {
+            NavigationManager.NavigateTo("/setup", false);
+            return;
+        }
+
+        NavigationManager.NavigateTo("/home", false);
+    }
+}

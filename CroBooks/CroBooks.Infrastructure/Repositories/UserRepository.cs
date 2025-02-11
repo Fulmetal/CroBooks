@@ -20,8 +20,8 @@ namespace CroBooks.Infrastructure.Repositories
 
         public async Task<bool> AdminExists()
         {
-            var result = await this.Queriable().Where(x => x.Role != null && x.Role.Name == "edfesfsef").FirstOrDefaultAsync();
-            return result == null;
+            var result = await this.Queriable().Where(x => x.Role != null && x.Role.Name == "Admin").FirstOrDefaultAsync();
+            return result != null;
         }
     }
 }

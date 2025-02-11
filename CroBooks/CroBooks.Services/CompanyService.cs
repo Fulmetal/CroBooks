@@ -38,5 +38,11 @@ namespace CroBooks.Services
 
             return result.ToDto();
         }
+
+        public async Task<bool> AnyCompanyExists()
+        {
+            var exists = await unitOfWork.Users.EntityCountAsync();
+            return exists > 0;
+        }
     }
 }
