@@ -76,7 +76,7 @@ namespace CroBooks.Services
 
         public async Task<bool> AdminCheck()
         {
-            var exists = await unitOfWork.Users.EntityExistsAsync(x => x.Role.Name == "Admin");
+            var exists = await unitOfWork.Users.AdminExists();
             return exists;
         }
     }

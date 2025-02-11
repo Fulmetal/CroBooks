@@ -6,7 +6,7 @@ namespace CroBooks.Web.HttpClients
 {
     public class CompanyHttpClient : ApiHttpClientBase
     {
-        public const string controllerBase = "/api/user";
+        public const string controllerBase = "/api/company";
 
         public CompanyHttpClient(HttpClient httpClient) : base(httpClient)
         {

@@ -10,12 +10,16 @@
     <MudText Typo="@Typo.h1">Cro Books</MudText>
     <MudText Typo="@Typo.h3">Setup</MudText>
 
-    @if (!adminExists)
-    {
+    <MudDivider></MudDivider>
+    <MudCarousel @ref="carousel" @bind-SelectedIndex="wizardStep" Style="height:50vh;" Class="mud-width-full" ShowArrows="false" ShowBullets="false" EnableSwipeGesture="false" AutoCycle="false" TData="string">
+        <MudCarouselItem Transition="Transition.Slide">
 
-        <MudDivider></MudDivider>
-        <MudCarousel @bind-SelectedIndex="wizardStep" Style="height:50vh;" Class="mud-width-full" ShowArrows="false" ShowBullets="true" EnableSwipeGesture="false" AutoCycle="false" TData="object">
-            <MudCarouselItem  Transition="Transition.Slide" >
+            @if (adminExists)
+            {
+                <MudText Typo="Typo.h6">User created</MudText>
+            }
+            else
+            {
                 <EditForm Model="@userRequest" OnValidSubmit="OnValidUserSubmit">
                     <DataAnnotationsValidator />
                     <MudCard>
@@ -30,7 +34,7 @@
                         </MudCardContent>
                         <MudCardActions>
                             @if (wizardStep == 0)
-                            { 
+                            {
                                 <MudButton Disabled="@userInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
                                     @if (userInsertBusy)
                                     {
@@ -46,28 +50,66 @@
                         </MudCardActions>
                     </MudCard>
                 </EditForm>
-            </MudCarouselItem>
-            <MudCarouselItem Transition="Transition.Slide">
-                Setup wizard 2
-            </MudCarouselItem>
-        </MudCarousel>
-    }
+            }
+
+        </MudCarouselItem>
+        <MudCarouselItem Transition="Transition.Slide">
+            <EditForm Model="@companyDto" OnValidSubmit="OnValidCompanySubmit">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardHeader><MudText Typo="Typo.h5"> Create company</MudText></MudCardHeader>
+                    <MudCardContent>
+                        <MudTextField Variant="Variant.Text" Label="Name*" @bind-Value="companyDto.Name" For="@(() => companyDto.Name)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Address*" @bind-Value="companyDto.Address" For="@(() => companyDto.Address)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Postal Code*" @bind-Value="companyDto.PostalCode" For="@(() => companyDto.PostalCode)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="City*" @bind-Value="companyDto.City" For="@(() => companyDto.City)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Country*" @bind-Value="companyDto.Country" For="@(() => companyDto.Country)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Tax Number*" @bind-Value="companyDto.TaxNumber" For="@(() => companyDto.TaxNumber)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="IBAN*" @bind-Value="companyDto.IBAN" For="@(() => companyDto.IBAN)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="Registered Activity*" @bind-Value="companyDto.RegisteredActivity" For="@(() => companyDto.RegisteredActivity)"></MudTextField>
+                        <MudDatePicker Variant="Variant.Text" Label="Registration Date*" @bind-Date="companyDto.RegistrationDate" For="@(() => companyDto.RegistrationDate)"></MudDatePicker>
+                    </MudCardContent>
+                    <MudCardActions>
+                        @if (wizardStep == 1)
+                        {
+                            <MudButton Disabled="@userInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+                                @if (userInsertBusy)
+                                {
+                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                    <MudText Class="ms-2">Processing</MudText>
+                                }
+                                else
+                                {
+                                    <MudText>Create</MudText>
+                                    
+                                }
+                            </MudButton>
+                        }
+                    </MudCardActions>
+                </MudCard>
+            </EditForm>
+        </MudCarouselItem>
+    </MudCarousel>
 </MudStack>
 
 @code {
     [Inject] UserHttpClient UserHttpClient { get; set; } = null!;
+    [Inject] CompanyHttpClient CompanyHttpClient { get; set; } = null!;
+    [Inject] NavigationManager NavigationManager { get; set; } = null!;
 
     private bool adminExists = false;
-    private CreateUserRequestDto userRequest = new() { RoleId = 1};
+    private CreateUserRequestDto userRequest = new() { RoleId = 1 };
+    private CompanyDto companyDto = new();
+    private MudCarousel<string> carousel = null!;
     private int wizardStep = 0;
     bool userInsertBusy = false;
+    bool companyInsertBusy = false;
 
     protected override async Task OnInitializedAsync()
     {
         adminExists = await UserHttpClient.CheckAdminExists();
         if (adminExists)
             wizardStep = 1;
-
     }
 
     protected async Task OnValidUserSubmit()
@@ -76,8 +118,19 @@
         var result = await UserHttpClient.AddUser(userRequest);
         userInsertBusy = false;
         if (result != null)
-        { 
+        {
             wizardStep++;
+        }
+    }
+
+    protected async Task OnValidCompanySubmit()
+    {
+        userInsertBusy = true;
+        var result = await CompanyHttpClient.AddCompany(companyDto);
+        userInsertBusy = false;
+        if (result != null)
+        {
+            NavigationManager.NavigateTo("/", false);
         }
     }
 }

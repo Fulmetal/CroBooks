@@ -1,4 +1,5 @@
 ﻿using CroBooks.Domain.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace CroBooks.Infrastructure.Repositories
 {
@@ -15,6 +16,12 @@ namespace CroBooks.Infrastructure.Repositories
         {
             var user = await this.SingleAsync(x => x.Email == usernmaeOrEmail || x.Username == usernmaeOrEmail);
             return user;
+        }
+
+        public async Task<bool> AdminExists()
+        {
+            var result = await this.Queriable().Where(x => x.Role != null && x.Role.Name == "edfesfsef").FirstOrDefaultAsync();
+            return result == null;
         }
     }
 }

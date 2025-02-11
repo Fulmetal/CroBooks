@@ -32,7 +32,7 @@ namespace CroBooks.Domain.Companies
             this.TaxNumber = dto.TaxNumber;
             this.IBAN = dto.IBAN;
             this.RegisteredActivity = dto.RegisteredActivity;
-            this.RegistrationDate = dto.RegistrationDate;
+            this.RegistrationDate = dto.RegistrationDate.Value.ToUniversalTime();
             this.IsDefault = dto.IsDefault;
         }
 

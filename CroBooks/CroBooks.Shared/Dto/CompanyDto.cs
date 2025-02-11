@@ -22,7 +22,7 @@ namespace CroBooks.Shared.Dto
         [Required]
         public string RegisteredActivity { get; set; } = string.Empty;
         [Required]
-        public DateTime RegistrationDate { get; set; } = DateTime.Now;
+        public DateTime? RegistrationDate { get; set; } = DateTime.Now;
         public bool IsDefault { get; set; }
     }
 }
