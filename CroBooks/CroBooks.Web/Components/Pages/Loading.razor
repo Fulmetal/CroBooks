@@ -3,10 +3,11 @@
 
 @page "/"
 @layout EmptyLayout
+@inherits AppComponentBase
 
 <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Style="height: 80vh">
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" Style="height:100px;width:100px;" />
-    <MudText Typo="Typo.h1">Loading</MudText>
+    <MudText Typo="Typo.h1">@Localize("Loading_Loading")</MudText>
 </MudStack>
 
 

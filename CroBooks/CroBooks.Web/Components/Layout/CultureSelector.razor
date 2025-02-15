@@ -1,0 +1,51 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Localization;
+@rendermode InteractiveServer
+
+@if (cultures != null)
+{
+    <MudSelect Placeholder="Select culture" @bind-Value="Culture" FullWidth="false" ToStringFunc="@convertFunc" OpenIcon="@Icons.Material.Filled.Language" AdornmentColor="Color.Tertiary">
+        @foreach (var culture in cultures)
+        {
+            <MudSelectItem Value="@(CultureInfo.GetCultureInfo(culture.Key))" />
+        }
+    </MudSelect>
+}
+
+@code {
+    [Inject] NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] IConfiguration Configuration { get; set; } = null!;
+
+    private Dictionary<string, string> cultures = new Dictionary<string, string>();
+
+    protected override void OnInitialized()
+    {
+        var cultureSection = Configuration?.GetSection("Cultures");
+        if (cultureSection != null)
+        {
+            cultures = cultureSection.GetChildren()?.ToDictionary(x => x.Key, x => x.Value) ?? new Dictionary<string, string>();
+        }
+
+        Culture = CultureInfo.CurrentCulture;
+
+        StateHasChanged();
+    }
+
+    private Func<CultureInfo, string> convertFunc = ci => ci?.NativeName;
+
+    private CultureInfo Culture
+    {
+        get => CultureInfo.CurrentCulture;
+        set
+        {
+            if (CultureInfo.CurrentCulture != value)
+            {
+                var uri = new Uri(NavigationManager.Uri).GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+                var cultureEscapted = Uri.EscapeDataString(value.Name);
+                var uriEscaped = Uri.EscapeDataString(uri);
+
+                NavigationManager.NavigateTo($"Culture/set?culture={cultureEscapted}&returnUrl={uriEscaped}", forceLoad: true);
+            }
+        }
+    }
+}
