@@ -70,6 +70,33 @@ namespace CroBooks.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string Menu_Home {
+            get {
+                return ResourceManager.GetString("Menu_Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My Company.
+        /// </summary>
+        public static string Menu_MyCompany {
+            get {
+                return ResourceManager.GetString("Menu_MyCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My Company.
+        /// </summary>
+        public static string MyCompany_Title {
+            get {
+                return ResourceManager.GetString("MyCompany_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create admin user.
         /// </summary>
         public static string Setup_CreateAdmin {

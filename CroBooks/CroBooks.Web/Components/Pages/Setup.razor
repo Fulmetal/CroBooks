@@ -106,7 +106,7 @@
     private bool adminExists = false;
     private bool companyExists = false;
     private CreateUserRequestDto userRequest = new() { RoleId = 1 };
-    private CompanyDto companyDto = new();
+    private CompanyDto companyDto = new() { IsDefault = true };
     private MudCarousel<string> carousel = null!;
     private int wizardStep = 0;
     bool userInsertBusy = false;

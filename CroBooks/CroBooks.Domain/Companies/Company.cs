@@ -54,5 +54,19 @@ namespace CroBooks.Domain.Companies
                 IsDefault = this.IsDefault
             };
         }
+
+        public void UpdateFromDto(Company company, CompanyDto dto)
+        {
+            this.Name = dto.Name;
+            this.Address = dto.Address;
+            this.PostalCode = dto.PostalCode;
+            this.City = dto.City;
+            this.Country = dto.Country;
+            this.TaxNumber = dto.TaxNumber;
+            this.IBAN = dto.IBAN;
+            this.RegisteredActivity = dto.RegisteredActivity;
+            this.RegistrationDate = dto.RegistrationDate.HasValue ? dto.RegistrationDate.Value.ToUniversalTime() : company.RegistrationDate;
+            this.IsDefault = dto.IsDefault;
+        }
     }
 }

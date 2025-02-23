@@ -1,0 +1,54 @@
+﻿@page "/mycompany"
+@using CroBooks.Shared.Dto
+
+@inherits AppComponentBase
+
+<EditForm Model="@companyDto" OnValidSubmit="OnValidCompanySubmit">
+    <DataAnnotationsValidator />
+    <MudCard>
+        <MudCardHeader><MudText Typo="Typo.h5">@Localize("MyCompany_Title")</MudText></MudCardHeader>
+        <MudCardContent>
+            <MudTextField Variant="Variant.Text" Label="@(LocalizeLabel(() => companyDto.Name))" @bind-Value="companyDto.Name" For="@(() => companyDto.Name)"></MudTextField>
+            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.Address))" @bind-Value="companyDto.Address" For="@(() => companyDto.Address)"></MudTextField>
+            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.PostalCode))" @bind-Value="companyDto.PostalCode" For="@(() => companyDto.PostalCode)"></MudTextField>
+            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.City))" @bind-Value="companyDto.City" For="@(() => companyDto.City)"></MudTextField>
+            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.Country))" @bind-Value="companyDto.Country" For="@(() => companyDto.Country)"></MudTextField>
+            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.TaxNumber))" @bind-Value="companyDto.TaxNumber" For="@(() => companyDto.TaxNumber)"></MudTextField>
+            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.IBAN))" @bind-Value="companyDto.IBAN" For="@(() => companyDto.IBAN)"></MudTextField>
+            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.RegisteredActivity))" @bind-Value="companyDto.RegisteredActivity" For="@(() => companyDto.RegisteredActivity)"></MudTextField>
+            <MudDatePicker Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.RegistrationDate))" @bind-Date="companyDto.RegistrationDate" For="@(() => companyDto.RegistrationDate)"></MudDatePicker>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Disabled="@componentBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+                @if (componentBusy)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">@LocalizeElement("ButtonProcessing")</MudText>
+                }
+                else
+                {
+                    <MudText>@LocalizeElement("ButtonSave")</MudText>
+                }
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+    [Inject] CompanyHttpClient CompanyHttpClient { get; set; } = null!;
+
+    private CompanyDto companyDto = new();
+    bool componentBusy = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        companyDto = await CompanyHttpClient.GetDefaultCompany();
+    }
+
+    protected async Task OnValidCompanySubmit()
+    {
+        componentBusy = true;
+        var result = await CompanyHttpClient.UpdateCompany(companyDto);
+        componentBusy = false;
+    }
+}

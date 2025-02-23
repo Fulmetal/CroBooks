@@ -8,5 +8,7 @@ namespace CroBooks.Services.Interfaces
         Task<bool> AnyCompanyExists();
         Task<List<CompanyDto>> GetCompanies();
         Task<CompanyDto?> GetCompany(int id);
+        Task<CompanyDto?> GetDefaultCompany();
+        Task<CompanyDto?> UpdateCompany(CompanyDto dto);
     }
 }

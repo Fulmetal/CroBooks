@@ -141,4 +141,7 @@
   <data name="ButtonProcessing" xml:space="preserve">
     <value>Processing</value>
   </data>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
 </root>

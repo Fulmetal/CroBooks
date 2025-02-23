@@ -120,6 +120,15 @@
   <data name="Loading_Loading" xml:space="preserve">
     <value>Učitavanje</value>
   </data>
+  <data name="Menu_Home" xml:space="preserve">
+    <value>Početna</value>
+  </data>
+  <data name="Menu_MyCompany" xml:space="preserve">
+    <value>Moj obrt</value>
+  </data>
+  <data name="MyCompany_Title" xml:space="preserve">
+    <value>Moj obrt</value>
+  </data>
   <data name="Setup_CreateAdmin" xml:space="preserve">
     <value>Stvorite admin korisnika</value>
   </data>

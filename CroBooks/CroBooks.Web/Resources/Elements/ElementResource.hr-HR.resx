@@ -141,4 +141,7 @@
   <data name="ButtonProcessing" xml:space="preserve">
     <value>Obrada</value>
   </data>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>Spremi</value>
+  </data>
 </root>

@@ -131,5 +131,14 @@ namespace CroBooks.Web.Resources.Elements {
                 return ResourceManager.GetString("ButtonProcessing", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string ButtonSave {
+            get {
+                return ResourceManager.GetString("ButtonSave", resourceCulture);
+            }
+        }
     }
 }

@@ -10,9 +10,11 @@
   &lt;property name="#LayoutVersion" /&gt;
   &lt;property name="#LayoutScaleFactor"&gt;@1,Width=1@1,Height=1&lt;/property&gt;
 &lt;/XtraSerializer&gt;</globalSetting>
+    <globalSetting name="projectMruItems">&lt;?xml version='1.0' encoding='utf-8'?&gt;&lt;items&gt;&lt;item type="2" checksum="4245571294" /&gt;&lt;/items&gt;</globalSetting>
     <userSetting name="Fulmetal@ALPHONSE.filesInitialDir">F:\Repos\CroBooks\CroBooks\CroBooks.Web\Resources\Models</userSetting>
     <userSetting name="Fulmetal@ALPHONSE.FindText">
     </userSetting>
+    <userSetting name="Fulmetal@ALPHONSE.RecentFiles">F:\Repos\CroBooks\CroBooks\CroBooks.Web\Resources\Models\ModelResource.resx;F:\Repos\CroBooks\CroBooks\CroBooks.Web\Resources\Models\ModelResource.en-UK.resx;F:\Repos\CroBooks\CroBooks\CroBooks.Web\Resources\Models\ModelResource.hr-HR.resx</userSetting>
     <description>
     </description>
   </configuration>
