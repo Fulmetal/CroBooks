@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Calendar_Title" xml:space="preserve">
+    <value>Calendar</value>
+  </data>
+  <data name="Home_Title" xml:space="preserve">
+    <value>Home</value>
+  </data>
   <data name="Loading_Loading" xml:space="preserve">
     <value>Loading</value>
+  </data>
+  <data name="Menu_Callendar" xml:space="preserve">
+    <value>Callendar</value>
   </data>
   <data name="Menu_Home" xml:space="preserve">
     <value>Home</value>

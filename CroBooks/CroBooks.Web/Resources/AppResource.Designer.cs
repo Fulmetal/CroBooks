@@ -61,11 +61,38 @@ namespace CroBooks.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calendar.
+        /// </summary>
+        public static string Calendar_Title {
+            get {
+                return ResourceManager.GetString("Calendar_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string Home_Title {
+            get {
+                return ResourceManager.GetString("Home_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading.
         /// </summary>
         public static string Loading_Loading {
             get {
                 return ResourceManager.GetString("Loading_Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Callendar.
+        /// </summary>
+        public static string Menu_Callendar {
+            get {
+                return ResourceManager.GetString("Menu_Callendar", resourceCulture);
             }
         }
         

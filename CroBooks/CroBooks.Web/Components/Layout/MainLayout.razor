@@ -16,6 +16,7 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">Cro Books</MudText>
         <MudSpacer />
+        <CultureSelector />
         <MudSwitch T="bool" Value="_isDarkMode" ValueChanged="@((e) => ToggleDarkMode(e))" 
         ThumbIcon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
         ThumbIconColor="@(_isDarkMode == true ? Color.Dark : Color.Dark)"
@@ -27,7 +28,7 @@
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+        <MudContainer Class="pt-3" MaxWidth="MaxWidth.ExtraExtraLarge">
             @Body
         </MudContainer>
     </MudMainContent>

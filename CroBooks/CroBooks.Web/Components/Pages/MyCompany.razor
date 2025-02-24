@@ -3,10 +3,11 @@
 
 @inherits AppComponentBase
 
+<PageHeading>@Localize("MyCompany_Title")</PageHeading>
+
 <EditForm Model="@companyDto" OnValidSubmit="OnValidCompanySubmit">
     <DataAnnotationsValidator />
     <MudCard>
-        <MudCardHeader><MudText Typo="Typo.h5">@Localize("MyCompany_Title")</MudText></MudCardHeader>
         <MudCardContent>
             <MudTextField Variant="Variant.Text" Label="@(LocalizeLabel(() => companyDto.Name))" @bind-Value="companyDto.Name" For="@(() => companyDto.Name)"></MudTextField>
             <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.Address))" @bind-Value="companyDto.Address" For="@(() => companyDto.Address)"></MudTextField>

@@ -5,7 +5,6 @@ using CroBooks.Web.Resources.Models;
 using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace CroBooks.Web.Helpers
 {
@@ -29,7 +28,6 @@ namespace CroBooks.Web.Helpers
             if (propertyExpression.Body is MemberExpression memberExpression)
             {
                 var propertyName = memberExpression.Member.Name;
-                //var propertyInfo = typeof(T).GetProperty(propertyName);
 
                 var translation = modelLocalizer[propertyName];
                 if (translation.ResourceNotFound)

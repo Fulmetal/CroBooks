@@ -1,0 +1,15 @@
+﻿@if (SetAsPageTitle)
+{
+    <PageTitle>
+        @ChildContent
+    </PageTitle>
+}
+
+<MudText Typo="Typo.h4">
+    @ChildContent
+</MudText>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public bool SetAsPageTitle { get; set; } = true;
+}
