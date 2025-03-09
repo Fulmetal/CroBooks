@@ -15,6 +15,7 @@ namespace CroBooks.Web.Extensions
 
             services.AddScoped<UserHttpClient, UserHttpClient>();
             services.AddScoped<CompanyHttpClient, CompanyHttpClient>();
+            services.AddScoped<AuthHttpClient, AuthHttpClient>();
             //services.AddHttpClient<UserHttpClient>(client =>
             ////{ client.BaseAddress = new("https+http://ApiService/api/user"); });
             //{ client.BaseAddress = new("https+http://apiservice"); });

@@ -14,11 +14,6 @@ namespace CroBooks.Web.HttpClients
         {
         }
 
-        public async Task<LoginResponseDto> Login(LoginRequestDto dto)
-        {
-            return await PostAsJsonAsync<LoginRequestDto, LoginResponseDto>(dto, $"{controllerBase}/login");
-        }
-
         public async Task<UserDto> GetUser(int id)
         {
             return await GetAsync<UserDto>($"{controllerBase}/{id}");
@@ -32,6 +27,11 @@ namespace CroBooks.Web.HttpClients
         public async Task<UserDto> AddUser(CreateUserRequestDto dto)
         {
             return await PostAsJsonAsync<CreateUserRequestDto, UserDto>(dto, $"{controllerBase}/");
+        }
+
+        public async Task<UserDto> SetupAdminUser(CreateUserRequestDto dto)
+        {
+            return await PostAsJsonAsync<CreateUserRequestDto, UserDto>(dto, $"{controllerBase}/setupadmin");
         }
 
         public async Task<bool> CheckAdminExists()

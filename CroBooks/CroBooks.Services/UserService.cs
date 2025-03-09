@@ -2,23 +2,32 @@
 using CroBooks.Domain.Users;
 using CroBooks.Services.Helpers;
 using CroBooks.Services.Interfaces;
+using CroBooks.Services.Models.Options;
 using CroBooks.Shared.Dto;
 using CroBooks.Shared.Dto.Request;
 using CroBooks.Shared.Dto.Response;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace CroBooks.Services
 {
     public class UserService : IUserService
     {
+        private readonly AppSecuritySettingsOptions securityOptions;
         private readonly IUnitOfWork unitOfWork;
 
-        public UserService(IUnitOfWork unitOfWork)
+        public UserService(IOptions<AppSecuritySettingsOptions> securityOptions
+            , IUnitOfWork unitOfWork)
         {
+            this.securityOptions = securityOptions.Value;
             this.unitOfWork = unitOfWork;
         }
 
         public async Task<LoginResponseDto> Login(LoginRequestDto dto)
         {
+            if (securityOptions == null)
+                throw new ApplicationException("Configuration error");
+
             var response = new LoginResponseDto()
             {
                 Message = "User or passowrd is invalid;",
@@ -26,15 +35,17 @@ namespace CroBooks.Services
 
             var user = await unitOfWork.Users.GetUserByEmailOrUsername(dto.UsernameOrEmail);
             if (user == null)
-            {
                 return response;
-            }
+
+            var role = await unitOfWork.Roles.FindAsync(user.RoleId);
+            if (role == null)
+                return response;
 
             var passHash = SecurityHelper.CreatePasswordHash(dto.Password);
             var passwordValid = SecurityHelper.ValidatePassword(dto.Password, user.Password);
             if (passwordValid)
             {
-                response.Token = SecurityHelper.CreateToken(user.Id.ToString(), user.Username, user.FirstName, user.LastName, string.Empty, "todo: generate proper key and store it");
+                response.Token = SecurityHelper.CreateToken(user.Id.ToString(), user.Username, user.FirstName, user.LastName, role.Name, securityOptions);
                 response.Message = "Login successful";
             }
 
@@ -57,8 +68,14 @@ namespace CroBooks.Services
             return users.Select(x => x.ToDto()).ToList();
         }
 
-        public async Task<UserDto> AddUser(CreateUserRequestDto dto)
+        public async Task<UserDto?> AddUser(CreateUserRequestDto dto)
         {
+            var usernameExists = await unitOfWork.Users.EntityExistsAsync(x => x.Username == dto.Username);
+            var emailExists = await unitOfWork.Users.EntityExistsAsync(x => x.Email == dto.Email);
+
+            if (usernameExists || emailExists)
+                return null;
+
             var user = new User()
             {
                 CreatedDate = DateTime.UtcNow,

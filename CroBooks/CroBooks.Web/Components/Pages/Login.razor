@@ -1,0 +1,45 @@
+﻿@page "/login"
+@using CroBooks.Shared.Dto.Request
+
+@inherits AppComponentBase
+
+<MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Style="height: 80vh">
+    <MudPaper Elevation="1">
+        <EditForm Model="@loginRequest" OnValidSubmit="OnValidUserSubmit">
+            <DataAnnotationsValidator />
+            <MudTextField Variant="Variant.Text"  Label="@(LocalizeLabel(() => loginRequest.UsernameOrEmail))" @bind-Value="loginRequest.UsernameOrEmail" For="@(() => loginRequest.UsernameOrEmail)"></MudTextField>
+            <MudTextField Variant="Variant.Text" InputType="InputType.Password" Label="@(LocalizeLabel(() => loginRequest.Password))" @bind-Value="loginRequest.Password" For="@(() => loginRequest.Password)"></MudTextField>
+        </EditForm>
+    </MudPaper>
+</MudStack>
+
+@code {
+    [Inject] public AuthHttpClient authHttpClient { get; set; }
+    [Inject] public SecurityHelper securityHelper { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    [Inject] public ISnackbar Snackbar { get; set; }
+
+    private LoginRequestDto loginRequest = new();
+
+    private async Task OnValidUserSubmit()
+    {
+        var result = await authHttpClient.Login(loginRequest);
+
+        if (result == null)
+        {
+            Snackbar.Add("There was an error logging in.", Severity.Error);
+            return;
+        }
+ 
+        if (!string.IsNullOrEmpty(result.Message) && string.IsNullOrEmpty(result.Token))
+        {
+            Snackbar.Add(result.Message, Severity.Error);
+        }
+
+        if (result != null && result.Token != null)
+        {
+            await securityHelper.SetToken(result.Token);
+            NavigationManager.NavigateTo("/home", false);
+        }
+    }
+}

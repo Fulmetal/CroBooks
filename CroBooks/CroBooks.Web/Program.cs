@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using CroBooks.Web.Components;
 using CroBooks.Web.Extensions;
 using CroBooks.Web.Helpers;
@@ -15,10 +16,13 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddHttpClients();
 builder.Services.AddSingleton<TranslationHelper>();
+builder.Services.AddScoped<SecurityHelper>();
 
 builder.Services.AddControllers();
 builder.Services.AddLocalization();
 //builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddMudServices();
 

@@ -124,7 +124,7 @@
     protected async Task OnValidUserSubmit()
     {
         userInsertBusy = true;
-        var result = await UserHttpClient.AddUser(userRequest);
+        var result = await UserHttpClient.SetupAdminUser(userRequest);
         if (result != null)
         {
             adminExists = true;

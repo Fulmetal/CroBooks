@@ -18,15 +18,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var users = await UserHttpClient.GetUsers();
-        var companies = await CompanyHttpClient.GetCompanies();
-
-        if (users.Count == 0 || companies.Count == 0)
+        var adminExists = await UserHttpClient.CheckAdminExists();
+        var companyExists = await CompanyHttpClient.CheckAnyCompanyExists();
+        
+        if (adminExists && companyExists)
         {
-            NavigationManager.NavigateTo("/setup", false);
+            NavigationManager.NavigateTo("/home", false);
             return;
         }
 
-        NavigationManager.NavigateTo("/home", false);
+        NavigationManager.NavigateTo("/setup", false);
+
     }
 }

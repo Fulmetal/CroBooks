@@ -41,23 +41,21 @@
 </div>
 
 @code {
-    // [Inject] public UserHttpClient UserHttpClient { get; set; } = null!;
-    // [Inject] public CompanyHttpClient CompanyHttpClient { get; set; } = null!;
-    // [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] SecurityHelper securityHelper { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
 
     bool _drawerOpen = true;
     bool _isDarkMode = true;
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     var users = await UserHttpClient.GetUsers();
-    //     var companies = await CompanyHttpClient.GetCompanies();
+    protected override async Task OnInitializedAsync()
+    {
+        var authenticated = await securityHelper.IsAuthenticated();
 
-    //     if (users.Count == 0 || companies.Count == 0)
-    //     { 
-    //         NavigationManager.NavigateTo("/setup");
-    //     }
-    // }
+        if (!authenticated)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    }
 
     void DrawerToggle()
     {
