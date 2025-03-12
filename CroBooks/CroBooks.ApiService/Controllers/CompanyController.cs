@@ -1,6 +1,7 @@
 ﻿using CroBooks.Services.Interfaces;
 using CroBooks.Shared.Dto;
 using CroBooks.Shared.ValidationAttributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CroBooks.ApiService.Controllers
@@ -8,6 +9,7 @@ namespace CroBooks.ApiService.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
+    [Authorize]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService companyService;
@@ -92,6 +94,7 @@ namespace CroBooks.ApiService.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("AnyCompanyExists")]
         public async Task<IActionResult> AnyCompanyExists()
         {

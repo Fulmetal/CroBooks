@@ -138,6 +138,9 @@
   <data name="ButtonEdit" xml:space="preserve">
     <value>Ažuriraj</value>
   </data>
+  <data name="ButtonLogin" xml:space="preserve">
+    <value>Prijava</value>
+  </data>
   <data name="ButtonProcessing" xml:space="preserve">
     <value>Obrada</value>
   </data>

@@ -1,5 +1,6 @@
 ﻿using CroBooks.Services.Interfaces;
 using CroBooks.Shared.Dto.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,8 @@ namespace CroBooks.ApiService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class AuthController : ControllerBase
     {
         private readonly IUserService userService;
@@ -16,6 +19,7 @@ namespace CroBooks.ApiService.Controllers
             this.userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequestDto dto)
         {

@@ -6,7 +6,6 @@ using CroBooks.Services.Models.Options;
 using CroBooks.Shared.Dto;
 using CroBooks.Shared.Dto.Request;
 using CroBooks.Shared.Dto.Response;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace CroBooks.Services

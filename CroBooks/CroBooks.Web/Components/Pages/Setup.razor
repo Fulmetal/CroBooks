@@ -101,9 +101,9 @@
 </MudStack>
 
 @code {
-    [Inject] UserHttpClient UserHttpClient { get; set; } = null!;
-    [Inject] CompanyHttpClient CompanyHttpClient { get; set; } = null!;
-    [Inject] NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] public UserHttpClient UserHttpClient { get; set; } = null!;
+    [Inject] public CompanyHttpClient CompanyHttpClient { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
     private bool adminExists = false;
     private bool companyExists = false;

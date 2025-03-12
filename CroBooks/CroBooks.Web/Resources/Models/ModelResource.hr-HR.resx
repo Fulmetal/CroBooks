@@ -168,4 +168,7 @@
   <data name="TaxNumber" xml:space="preserve">
     <value>OIB</value>
   </data>
+  <data name="UsernameOrEmail" xml:space="preserve">
+    <value>Korisničko ime ili e-pošta</value>
+  </data>
 </root>

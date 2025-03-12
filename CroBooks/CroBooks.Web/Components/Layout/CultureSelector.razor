@@ -13,8 +13,8 @@
 }
 
 @code {
-    [Inject] NavigationManager NavigationManager { get; set; } = null!;
-    [Inject] IConfiguration Configuration { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] public IConfiguration Configuration { get; set; } = null!;
 
     private Dictionary<string, string> cultures = new Dictionary<string, string>();
 

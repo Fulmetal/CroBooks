@@ -7,17 +7,27 @@
     <MudPaper Elevation="1">
         <EditForm Model="@loginRequest" OnValidSubmit="OnValidUserSubmit">
             <DataAnnotationsValidator />
-            <MudTextField Variant="Variant.Text"  Label="@(LocalizeLabel(() => loginRequest.UsernameOrEmail))" @bind-Value="loginRequest.UsernameOrEmail" For="@(() => loginRequest.UsernameOrEmail)"></MudTextField>
-            <MudTextField Variant="Variant.Text" InputType="InputType.Password" Label="@(LocalizeLabel(() => loginRequest.Password))" @bind-Value="loginRequest.Password" For="@(() => loginRequest.Password)"></MudTextField>
+            <MudCard>
+                <MudCardHeader>
+                    <MudText Typo="Typo.h4">@Localize("Login")</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudTextField Variant="Variant.Text"  Label="@(LocalizeLabel(() => loginRequest.UsernameOrEmail))" @bind-Value="loginRequest.UsernameOrEmail" For="@(() => loginRequest.UsernameOrEmail)"></MudTextField>
+                    <MudTextField Variant="Variant.Text" InputType="InputType.Password" Label="@(LocalizeLabel(() => loginRequest.Password))" @bind-Value="loginRequest.Password" For="@(() => loginRequest.Password)"></MudTextField>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@LocalizeElement("ButtonLogin")</MudButton>
+                </MudCardActions>
+            </MudCard>
         </EditForm>
     </MudPaper>
 </MudStack>
 
 @code {
-    [Inject] public AuthHttpClient authHttpClient { get; set; }
-    [Inject] public SecurityHelper securityHelper { get; set; }
-    [Inject] public NavigationManager NavigationManager { get; set; }
-    [Inject] public ISnackbar Snackbar { get; set; }
+    [Inject] public AuthHttpClient authHttpClient { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] public CustomAuthStateProvider AuthStateProvider { get; set; } = null!;
+    [Inject] public ISnackbar Snackbar { get; set; } = null!;
 
     private LoginRequestDto loginRequest = new();
 
@@ -38,7 +48,7 @@
 
         if (result != null && result.Token != null)
         {
-            await securityHelper.SetToken(result.Token);
+            await AuthStateProvider.UpdateAuthenticationState(result.Token);
             NavigationManager.NavigateTo("/home", false);
         }
     }
