@@ -8,5 +8,8 @@
 <MudCalendar ShowTodayButton="true" ShowWorkWeek="true" />
 
 @code {
-    
+    protected async override Task OnInitializedAsync()
+    {
+        this.RegisterInterceptor();
+    }
 }

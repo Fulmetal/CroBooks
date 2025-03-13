@@ -131,6 +131,12 @@ namespace CroBooks.Web.Helpers
             return role;
         }
 
+        public async Task<string?> GetTokenAsync()
+        {
+            var token = await localStorageService.GetItemAsync<string>("token");
+            return token;
+        }
+
         public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
             var payload = jwt.Split('.')[1];

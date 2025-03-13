@@ -31,6 +31,12 @@
 
     private LoginRequestDto loginRequest = new();
 
+    protected async override Task OnInitializedAsync()
+    {
+        this.RegisterInterceptor();
+        await Task.CompletedTask;
+    }
+
     private async Task OnValidUserSubmit()
     {
         var result = await authHttpClient.Login(loginRequest);

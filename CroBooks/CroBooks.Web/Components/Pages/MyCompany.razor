@@ -2,6 +2,7 @@
 @using CroBooks.Shared.Dto
 
 @inherits AppComponentBase
+@implements IDisposable
 
 <PageHeading>@Localize("MyCompany_Title")</PageHeading>
 
@@ -43,6 +44,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        this.RegisterInterceptor();
         companyDto = await CompanyHttpClient.GetDefaultCompany();
     }
 

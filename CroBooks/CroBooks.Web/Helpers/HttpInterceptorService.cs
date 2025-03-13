@@ -1,4 +1,5 @@
-﻿using CroBooks.Shared.Enums;
+﻿using Blazored.LocalStorage;
+using CroBooks.Shared.Enums;
 using CroBooks.Shared.Exceptions;
 using EduPortal.Shared.Exceptions;
 using MudBlazor;
@@ -11,20 +12,39 @@ public class HttpInterceptorService
 {
     private readonly HttpClientInterceptor _interceptor;
     private readonly CustomAuthStateProvider customAuthStateProvider;
+    private readonly ILocalStorageService localStorageService;
     private readonly ISnackbar _snackbar;
 
     public HttpInterceptorService(HttpClientInterceptor interceptor,
         CustomAuthStateProvider customAuthStateProvider,
+        ILocalStorageService localStorageService,
         ISnackbar snackbar)
     {
         _interceptor = interceptor;
         this.customAuthStateProvider = customAuthStateProvider;
+        this.localStorageService = localStorageService;
         _snackbar = snackbar;
     }
 
     public void RegisterEvent()
     {
         _interceptor.AfterSendAsync += InterceptResponse;
+        _interceptor.BeforeSendAsync += InterceptRequest;
+    }
+
+    private async Task InterceptRequest(object sender, HttpClientInterceptorEventArgs e)
+    {
+        try
+        {
+            var token = await localStorageService.GetItemAsync<string>("token");
+            if (string.IsNullOrEmpty(token)) return;
+            e.Request.Headers.Add("Authorization", $"Bearer {token}");
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
     }
 
     private async Task InterceptResponse(object sender, HttpClientInterceptorEventArgs e)
@@ -110,5 +130,6 @@ public class HttpInterceptorService
     public void DisposeEvent()
     {
         _interceptor.AfterSendAsync -= InterceptResponse;
+        _interceptor.BeforeSendAsync -= InterceptRequest;
     }
 }

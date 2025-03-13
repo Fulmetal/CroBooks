@@ -116,6 +116,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        this.RegisterInterceptor();
         adminExists = await UserHttpClient.CheckAdminExists();
         companyExists = await CompanyHttpClient.CheckAnyCompanyExists();
         WizardNextStep();
