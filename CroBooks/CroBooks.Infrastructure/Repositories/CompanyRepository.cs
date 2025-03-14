@@ -1,4 +1,6 @@
-﻿using CroBooks.Domain.Companies;
+﻿using CroBooks.Domain.Clients;
+using CroBooks.Domain.Companies;
+using CroBooks.Domain.Contacts;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace CroBooks.Infrastructure.Repositories

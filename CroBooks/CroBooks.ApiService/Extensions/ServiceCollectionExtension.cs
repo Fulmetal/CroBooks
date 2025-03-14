@@ -1,4 +1,6 @@
-﻿using CroBooks.Domain.Companies;
+﻿using CroBooks.Domain.Clients;
+using CroBooks.Domain.Companies;
+using CroBooks.Domain.Contacts;
 using CroBooks.Domain.Interfaces;
 using CroBooks.Domain.Users;
 using CroBooks.Infrastructure;
@@ -52,6 +54,8 @@ namespace CroBooks.ApiService.Extensions
         {
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
 
             return services;
         }

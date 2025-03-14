@@ -1,0 +1,12 @@
+﻿@page "/clients"
+
+@inherits AppComponentBase
+
+<PageHeading>@Localize("Clients_Title")</PageHeading>
+
+@code {
+    protected async override Task OnInitializedAsync()
+    {
+        this.RegisterInterceptor();
+    }
+}
