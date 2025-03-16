@@ -37,15 +37,21 @@
 </EditForm>
 
 @code {
+    [Inject] HttpInterceptorService interceptor { get; set; } = null!;
     [Inject] CompanyHttpClient CompanyHttpClient { get; set; } = null!;
 
     private CompanyDto companyDto = new();
     bool componentBusy = false;
 
-    protected override async Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
-        this.RegisterInterceptor();
+        interceptor.RegisterEvent();
         companyDto = await CompanyHttpClient.GetDefaultCompany();
+    }
+
+    public void Dispose()
+    {
+        interceptor.DisposeEvent();
     }
 
     protected async Task OnValidCompanySubmit()

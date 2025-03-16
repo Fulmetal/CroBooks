@@ -4,6 +4,7 @@ using CroBooks.Shared.Exceptions;
 using EduPortal.Shared.Exceptions;
 using MudBlazor;
 using System.Net;
+using System.Net.Http.Headers;
 using Toolbelt.Blazor;
 
 namespace CroBooks.Web.Helpers;
@@ -38,7 +39,11 @@ public class HttpInterceptorService
         {
             var token = await localStorageService.GetItemAsync<string>("token");
             if (string.IsNullOrEmpty(token)) return;
-            e.Request.Headers.Add("Authorization", $"Bearer {token}");
+            var authHeader = e.Request.Headers.FirstOrDefault(x => x.Key == "Authorization");
+            if (authHeader.Key == null)
+                e.Request.Headers.Add("Authorization", $"Bearer {token}");
+            if (authHeader.Key == "Autrhorization")
+                e.Request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
         catch (Exception ex)
         {

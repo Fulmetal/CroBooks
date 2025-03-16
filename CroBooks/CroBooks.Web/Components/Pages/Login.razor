@@ -2,6 +2,7 @@
 @using CroBooks.Shared.Dto.Request
 
 @inherits AppComponentBase
+@implements IDisposable
 
 <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Style="height: 80vh">
     <MudPaper Elevation="1">
@@ -24,6 +25,7 @@
 </MudStack>
 
 @code {
+    [Inject] public HttpInterceptorService interceptor { get; set; } = null!;
     [Inject] public AuthHttpClient authHttpClient { get; set; } = null!;
     [Inject] public NavigationManager NavigationManager { get; set; } = null!;
     [Inject] public CustomAuthStateProvider AuthStateProvider { get; set; } = null!;
@@ -33,8 +35,13 @@
 
     protected async override Task OnInitializedAsync()
     {
-        this.RegisterInterceptor();
+        interceptor.RegisterEvent();
         await Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        interceptor.DisposeEvent();
     }
 
     private async Task OnValidUserSubmit()

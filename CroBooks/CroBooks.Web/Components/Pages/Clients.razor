@@ -1,12 +1,20 @@
 ﻿@page "/clients"
 
 @inherits AppComponentBase
+@implements IDisposable
 
 <PageHeading>@Localize("Clients_Title")</PageHeading>
 
 @code {
+    [Inject] public HttpInterceptorService interceptor { get; set; } = null!;
+
     protected async override Task OnInitializedAsync()
     {
-        this.RegisterInterceptor();
+        interceptor.RegisterEvent();
+    }
+
+    public void Dispose()
+    {
+        interceptor.DisposeEvent();
     }
 }

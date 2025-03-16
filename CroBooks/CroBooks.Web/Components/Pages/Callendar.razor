@@ -2,14 +2,22 @@
 
 @using Heron.MudCalendar
 @inherits AppComponentBase
+@implements IDisposable
 
 <PageHeading>@Localize("Calendar_Title")</PageHeading>
 
 <MudCalendar ShowTodayButton="true" ShowWorkWeek="true" />
 
 @code {
+    [Inject] public HttpInterceptorService interceptor { get; set; } = null!;
+
     protected async override Task OnInitializedAsync()
     {
-        this.RegisterInterceptor();
+        interceptor.RegisterEvent();
+    }
+
+    public void Dispose()
+    {
+        interceptor.DisposeEvent();
     }
 }
