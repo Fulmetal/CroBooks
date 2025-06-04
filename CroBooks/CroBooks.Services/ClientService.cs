@@ -52,6 +52,10 @@ namespace CroBooks.Services
 
         public async Task DeleteClient(int id)
         {
+            var client = await unitOfWork.Clients.FindAsync(id);
+            if (client == null)
+                return;
+
             await unitOfWork.Clients.DeleteAsync(id);
             await unitOfWork.CommitAsync();
         }

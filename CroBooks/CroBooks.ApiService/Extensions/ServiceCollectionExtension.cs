@@ -46,6 +46,7 @@ namespace CroBooks.ApiService.Extensions
         {
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IClientService, ClientService>();
 
             return services;
         }

@@ -80,5 +80,16 @@ namespace CroBooks.ApiService.Controllers
                 });
             return Ok(result);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteClient([RequiredGreaterThanZero] int id)
+        {
+            if (id < 0)
+                return BadRequest("The id field cannot be less than 1");
+
+            await this.clientService.DeleteClient(id);
+
+            return Ok();
+        }
     }
 }
