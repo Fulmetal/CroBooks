@@ -6,12 +6,12 @@
 
 <PageHeading>@Localize("Calendar_Title")</PageHeading>
 
-<MudCalendar ShowTodayButton="true" ShowWorkWeek="true" />
+<MudCalendar T="CalendarItem" ShowTodayButton="true" ShowWorkWeek="true" />
 
 @code {
     [Inject] public HttpInterceptorService interceptor { get; set; } = null!;
 
-    protected async override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         interceptor.RegisterEvent();
     }
