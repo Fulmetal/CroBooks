@@ -56,6 +56,8 @@ namespace CroBooks.Services
                 return null;
             company.UpdateFromDto(company, dto);
             await unitOfWork.Companies.UpdateAsync(company);
+            await unitOfWork.CommitAsync();
+
             return company.ToDto();
         }
 
