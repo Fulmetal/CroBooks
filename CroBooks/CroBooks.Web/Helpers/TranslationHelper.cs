@@ -32,7 +32,7 @@ namespace CroBooks.Web.Helpers
                 var translation = modelLocalizer[propertyName];
                 if (translation.ResourceNotFound)
                 {
-                    return $"Translation not found: {propertyName}";
+                    return $"TNF: {propertyName}";
                 }
 
                 var requiredAttribute = memberExpression.Member.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault();
@@ -53,7 +53,7 @@ namespace CroBooks.Web.Helpers
             var translation = appLocalizer[key];
             if (translation.ResourceNotFound)
             {
-                return $"Translation not found: {key}";
+                return $"TNF: {key}";
             }
             return translation;
         }
@@ -63,7 +63,7 @@ namespace CroBooks.Web.Helpers
             var translation = elementLocalizer[key];
             if (translation.ResourceNotFound)
             {
-                return $"Translation not found: {key}";
+                return $"TNF: {key}";
             }
             return translation;
         }

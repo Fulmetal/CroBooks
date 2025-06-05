@@ -1,0 +1,37 @@
+﻿@using CroBooks.Shared.Dto
+
+@inherits AppComponentBase
+
+<MudTable Items="@ClientDtoList" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>@(LocalizeLabel(() => ClientDtoList.First().Name))</MudTh>
+        <MudTh>@(LocalizeLabel(() => ClientDtoList.First().Address))</MudTh>
+        <MudTh>@(LocalizeLabel(() => ClientDtoList.First().TaxNumber))</MudTh>
+        <MudTh>@(LocalizeLabel(() => ClientDtoList.First().Email))</MudTh>
+        <MudTh>@(LocalizeLabel(() => ClientDtoList.First().Phone))</MudTh>
+        <MudTh>@(LocalizeLabel(() => ClientDtoList.First().Note))</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="@(LocalizeLabel(() => context.Name))">@context.Name</MudTd>
+        <MudTd DataLabel="Address">@GetFullAddress(context)</MudTd>
+        <MudTd DataLabel="@(LocalizeLabel(() => context.TaxNumber))">@context.TaxNumber</MudTd>
+        <MudTd DataLabel="@(LocalizeLabel(() => context.Email))">@context.Email</MudTd>
+        <MudTd DataLabel="@(LocalizeLabel(() => context.Phone))">@context.Phone</MudTd>
+        <MudTd DataLabel="@(LocalizeLabel(() => context.Note))">@context.Note</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    [Parameter]
+    public List<ClientDto> ClientDtoList { get; set; } = new();
+
+    private string GetFullAddress(ClientDto client)
+    {
+        var parts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(client.Address)) parts.Add(client.Address);
+        if (!string.IsNullOrWhiteSpace(client.PostalCode)) parts.Add(client.PostalCode);
+        if (!string.IsNullOrWhiteSpace(client.City)) parts.Add(client.City);
+        if (!string.IsNullOrWhiteSpace(client.Country)) parts.Add(client.Country);
+        return string.Join(", ", parts);
+    }
+}

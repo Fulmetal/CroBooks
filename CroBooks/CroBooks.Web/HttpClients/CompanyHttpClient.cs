@@ -1,6 +1,5 @@
 ﻿using CroBooks.Shared.Dto;
 using CroBooks.Web.HttpClients.Base;
-using System.Text.Json;
 
 namespace CroBooks.Web.HttpClients
 {

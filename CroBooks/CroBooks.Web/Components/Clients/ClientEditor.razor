@@ -1,0 +1,40 @@
+﻿@using CroBooks.Shared.Dto
+@using CroBooks.Web.Enumeration
+@inherits AppComponentBase
+
+<EditForm Model="@Client" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator/>
+
+    <MudCard>
+        <MudCardContent>
+            <ClientForm Client="Client"></ClientForm>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >@LocalizeElement("ButtonSubmit")</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+    [Parameter]
+    public ClientDto Client { get; set; } = new();
+
+    [Parameter]
+    public EditorMode EditorMode { get; set; } = EditorMode.View;
+
+    [Inject]
+    public ClientHttpClient ClientHttpClient { get; set; } = null!;
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        if (EditorMode == EditorMode.Create)
+        {
+            var result = await ClientHttpClient.AddClient(Client);
+        }
+        if (EditorMode == EditorMode.Edit)
+        {
+            var result = await ClientHttpClient.UpdateClient(Client);
+        }
+        StateHasChanged();
+    }
+}

@@ -23,6 +23,7 @@ namespace CroBooks.Web.Extensions
 
             services.AddScoped<UserHttpClient, UserHttpClient>();
             services.AddScoped<CompanyHttpClient, CompanyHttpClient>();
+            services.AddScoped<ClientHttpClient, ClientHttpClient>();
             services.AddScoped<AuthHttpClient, AuthHttpClient>();
 
             return services;

@@ -1,0 +1,19 @@
+﻿@using MudBlazor
+@using CroBooks.Shared.Dto
+
+@inherits AppComponentBase
+
+<MudTextField @bind-Value="Client.Name" For="@(() => Client.Name)" Label="@(LocalizeLabel(() => Client.Name))" Required="true" />
+<MudTextField @bind-Value="Client.Address" For="@(() => Client.Address)" Label="@(LocalizeLabel(() => Client.Address))" />
+<MudTextField @bind-Value="Client.City" For="@(() => Client.City)" Label="@(LocalizeLabel(() => Client.City))" />
+<MudTextField @bind-Value="Client.PostalCode" For="@(() => Client.PostalCode)" Label="@(LocalizeLabel(() => Client.PostalCode))" />
+<MudTextField @bind-Value="Client.Country" For="@(() => Client.Country)" Label="@(LocalizeLabel(() => Client.Country))" />
+<MudTextField @bind-Value="Client.TaxNumber" For="@(() => Client.TaxNumber)" Label="@(LocalizeLabel(() => Client.TaxNumber))" />
+<MudTextField @bind-Value="Client.Email" For="@(() => Client.Email)" Label="@(LocalizeLabel(() => Client.Email))" Required="true" />
+<MudTextField @bind-Value="Client.Phone" For="@(() => Client.Phone)" Label="@(LocalizeLabel(() => Client.Phone))" />
+<MudTextField @bind-Value="Client.Note" For="@(() => Client.Note)" Label="@(LocalizeLabel(() => Client.Note))" />
+
+@code {
+    [Parameter]
+    public ClientDto Client { get; set; } = new();
+}

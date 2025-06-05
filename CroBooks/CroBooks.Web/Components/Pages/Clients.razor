@@ -1,16 +1,25 @@
 ﻿@page "/clients"
+@using CroBooks.Shared.Dto
+@using CroBooks.Web.Components.Clients
 
 @inherits AppComponentBase
 @implements IDisposable
 
 <PageHeading>@Localize("Clients_Title")</PageHeading>
 
+<ClientList ClientDtoList="clients" ></ClientList>
+
 @code {
     [Inject] public HttpInterceptorService interceptor { get; set; } = null!;
+    [Inject] public ClientHttpClient httpClient { get; set; } = null!;
+
+    private List<ClientDto> clients = new();
 
     protected async override Task OnInitializedAsync()
     {
         interceptor.RegisterEvent();
+
+        clients = await httpClient.GetClients();
     }
 
     public void Dispose()
