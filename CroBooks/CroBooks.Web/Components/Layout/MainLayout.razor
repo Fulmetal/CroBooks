@@ -1,8 +1,15 @@
 ﻿@using CroBooks.Web.HttpClients
+@using MudBlazor.ThemeManager
 @inherits LayoutComponentBase
 
+
+<MudThemeManagerButton OnClick="@((e) => OpenThemeManager(true))" />
+<MudThemeManager Open="_themeManagerOpen" OpenChanged="OpenThemeManager" Theme="_themeManager" ThemeChanged="UpdateTheme" />
+
+<MudThemeProvider Theme="_themeManager.Theme" IsDarkMode="@_isDarkMode" />
+
 @* Required *@
-<MudThemeProvider IsDarkMode="@_isDarkMode" />
+@* <MudThemeProvider IsDarkMode="@_isDarkMode" /> *@
 <MudPopoverProvider />
 
 @* Needed for dialogs *@
@@ -12,7 +19,8 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1">
+    @* <MudAppBar Elevation="1"> *@
+    <MudAppBar Elevation="_themeManager.AppBarElevation">
         <AuthorizeView>
             <Authorized>
                 <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
@@ -30,7 +38,8 @@
     </MudAppBar>
     <AuthorizeView>
         <Authorized>
-            <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+            @* <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2"> *@
+            <MudDrawer @bind-Open="_drawerOpen" ClipMode="_themeManager.DrawerClipMode" Elevation="_themeManager.DrawerElevation">
                 <NavMenu />
             </MudDrawer>
         </Authorized>
@@ -65,6 +74,8 @@
         }
     }
 
+
+
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
@@ -73,5 +84,24 @@
     void ToggleDarkMode(bool value)
     {
         _isDarkMode = value;
+    }
+
+    private ThemeManagerTheme _themeManager = new ThemeManagerTheme();
+    public bool _themeManagerOpen = false;
+
+    void OpenThemeManager(bool value)
+    {
+        _themeManagerOpen = value;
+    }
+
+    void UpdateTheme(ThemeManagerTheme value)
+    {
+        _themeManager = value;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        StateHasChanged();
     }
 }

@@ -10,6 +10,7 @@
         <MudTh>@(LocalizeLabel(() => ClientDtoList.First().Email))</MudTh>
         <MudTh>@(LocalizeLabel(() => ClientDtoList.First().Phone))</MudTh>
         <MudTh>@(LocalizeLabel(() => ClientDtoList.First().Note))</MudTh>
+        <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="@(LocalizeLabel(() => context.Name))">@context.Name</MudTd>
@@ -18,6 +19,7 @@
         <MudTd DataLabel="@(LocalizeLabel(() => context.Email))">@context.Email</MudTd>
         <MudTd DataLabel="@(LocalizeLabel(() => context.Phone))">@context.Phone</MudTd>
         <MudTd DataLabel="@(LocalizeLabel(() => context.Note))">@context.Note</MudTd>
+        <MudTd>BUTTONS GO HERE</MudTd>
     </RowTemplate>
 </MudTable>
 
