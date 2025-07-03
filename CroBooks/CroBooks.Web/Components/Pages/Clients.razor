@@ -7,11 +7,14 @@
 
 <PageHeading>@Localize("Clients_Title")</PageHeading>
 
+<MudButton OnClick="AddClientClick">@LocalizeElement("ButtonAddNew")</MudButton>
+
 <ClientList ClientDtoList="clients" ></ClientList>
 
 @code {
     [Inject] public HttpInterceptorService interceptor { get; set; } = null!;
     [Inject] public ClientHttpClient httpClient { get; set; } = null!;
+    [Inject] public IDialogService DialogService { get; set; } = null!;
 
     private List<ClientDto> clients = new();
 
@@ -25,5 +28,10 @@
     public void Dispose()
     {
         interceptor.DisposeEvent();
+    }
+
+    private async Task AddClientClick()
+    {
+        await DialogService.ShowAsync<ClientDialog>("Simple Dialog", new DialogOptions());
     }
 }
