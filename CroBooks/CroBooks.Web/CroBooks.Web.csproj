@@ -52,9 +52,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ElementResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Models\ModelResource.en-UK.resx">
-      <Generator></Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Models\ModelResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ModelResource.Designer.cs</LastGenOutput>
