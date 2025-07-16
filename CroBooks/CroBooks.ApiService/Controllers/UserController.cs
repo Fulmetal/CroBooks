@@ -2,7 +2,6 @@
 using CroBooks.Shared.Dto.Request;
 using CroBooks.Shared.ValidationAttributes;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CroBooks.ApiService.Controllers
@@ -10,19 +9,12 @@ namespace CroBooks.ApiService.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController(IUserService userService) : ControllerBase
     {
-        private readonly IUserService userService;
-
-        public UserController(IUserService userService)
-        {
-            this.userService = userService;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var result = await this.userService.GetUsers();
+            var result = await userService.GetUsers();
             if (result == null)
                 return NotFound(new ProblemDetails
                 {
@@ -38,7 +30,7 @@ namespace CroBooks.ApiService.Controllers
         {
             if (id < 0)
                 return BadRequest("The id field cannot be less than 1");
-            var result = await this.userService.GetUser(id);
+            var result = await userService.GetUser(id);
             if (result == null)
                 return NotFound(new ProblemDetails
                 {
@@ -53,7 +45,7 @@ namespace CroBooks.ApiService.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUser(CreateUserRequestDto dto)
         {
-            var result = await this.userService.AddUser(dto);
+            var result = await userService.AddUser(dto);
             if (result == null)
                 return BadRequest(new ProblemDetails
                 {
@@ -68,11 +60,11 @@ namespace CroBooks.ApiService.Controllers
         [HttpPost("setupadmin")]
         public async Task<IActionResult> SetupAdmin(CreateUserRequestDto dto)
         {
-            var adminExists = await this.userService.AdminCheck();
+            var adminExists = await userService.AdminCheck();
             if (adminExists)
                 return BadRequest("You can no longer use this endpoint");
 
-            var result = await this.userService.AddUser(dto);
+            var result = await userService.AddUser(dto);
             if (result == null)
                 return BadRequest(new ProblemDetails
                 {
@@ -87,7 +79,7 @@ namespace CroBooks.ApiService.Controllers
         [HttpGet("admincheck")]
         public async Task<IActionResult> AdminCheck()
         {
-            var result = await this.userService.AdminCheck();
+            var result = await userService.AdminCheck();
             return Ok(result);
         }
     }

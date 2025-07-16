@@ -10,19 +10,12 @@ namespace CroBooks.ApiService.Controllers
     [ApiController]
     [Produces("application/json")]
     [Authorize]
-    public class CompanyController : ControllerBase
+    public class CompanyController(ICompanyService companyService) : ControllerBase
     {
-        private readonly ICompanyService companyService;
-
-        public CompanyController(ICompanyService companyService)
-        {
-            this.companyService = companyService;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetCompanies()
         {
-            var result = await this.companyService.GetCompanies();
+            var result = await companyService.GetCompanies();
             if (result == null)
                 return NotFound(new ProblemDetails
                 {
@@ -36,7 +29,7 @@ namespace CroBooks.ApiService.Controllers
         [HttpGet("default")]
         public async Task<IActionResult> GetDefaultCompany()
         {
-            var result = await this.companyService.GetDefaultCompany();
+            var result = await companyService.GetDefaultCompany();
             if (result == null)
                 return NotFound(new ProblemDetails
                 {
@@ -53,7 +46,7 @@ namespace CroBooks.ApiService.Controllers
             if (id < 0)
                 return BadRequest("The id field cannot be less than 1");
 
-            var result = await this.companyService.GetCompany(id);
+            var result = await companyService.GetCompany(id);
 
             if (result == null)
                 return NotFound(new ProblemDetails
@@ -70,7 +63,7 @@ namespace CroBooks.ApiService.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AddCompany(CompanyDto dto)
         {
-            var result = await this.companyService.AddCompany(dto);
+            var result = await companyService.AddCompany(dto);
             if (result == null)
                 return NotFound(new ProblemDetails
                 {
@@ -84,7 +77,7 @@ namespace CroBooks.ApiService.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateCompany(CompanyDto dto)
         {
-            var result = await this.companyService.UpdateCompany(dto);
+            var result = await companyService.UpdateCompany(dto);
             if (result == null)
                 return NotFound(new ProblemDetails
                 {
@@ -99,7 +92,7 @@ namespace CroBooks.ApiService.Controllers
         [HttpGet("AnyCompanyExists")]
         public async Task<IActionResult> AnyCompanyExists()
         {
-            var result = await this.companyService.AnyCompanyExists();
+            var result = await companyService.AnyCompanyExists();
             return Ok(result);
         }
     }

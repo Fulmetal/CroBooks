@@ -11,19 +11,12 @@ namespace CroBooks.ApiService.Controllers
     [Produces("application/json")]
     [Authorize]
 
-    public class ClientController : ControllerBase
+    public class ClientController(IClientService clientService) : ControllerBase
     {
-        private readonly IClientService clientService;
-
-        public ClientController(IClientService clientService)
-        {
-            this.clientService = clientService;
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetClients()
         {
-            var result = await this.clientService.GetClients();
+            var result = await clientService.GetClients();
             if (result == null)
                 return NotFound(new ProblemDetails
                 {
@@ -40,7 +33,7 @@ namespace CroBooks.ApiService.Controllers
             if (id < 0)
                 return BadRequest("The id field cannot be less than 1");
 
-            var result = await this.clientService.GetClient(id);
+            var result = await clientService.GetClient(id);
 
             if (result == null)
                 return NotFound(new ProblemDetails
@@ -56,7 +49,7 @@ namespace CroBooks.ApiService.Controllers
         [HttpPost]
         public async Task<IActionResult> AddClient(ClientDto dto)
         {
-            var result = await this.clientService.AddClient(dto);
+            var result = await clientService.AddClient(dto);
             if (result == null)
                 return BadRequest(new ProblemDetails
                 {
@@ -70,7 +63,7 @@ namespace CroBooks.ApiService.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateClient(ClientDto dto)
         {
-            var result = await this.clientService.UpdateClient(dto);
+            var result = await clientService.UpdateClient(dto);
             if (result == null)
                 return NotFound(new ProblemDetails
                 {
@@ -87,7 +80,7 @@ namespace CroBooks.ApiService.Controllers
             if (id < 0)
                 return BadRequest("The id field cannot be less than 1");
 
-            await this.clientService.DeleteClient(id);
+            await clientService.DeleteClient(id);
 
             return Ok();
         }
