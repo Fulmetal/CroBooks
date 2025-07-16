@@ -1,22 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
-using CroBooks.Domain.Interfaces;
+﻿using CroBooks.Domain.Interfaces;
 using CroBooks.Domain.Roles;
 using CroBooks.Services.Interfaces;
 
-namespace OVKS.Services
+namespace CroBooks.Services
 {
-    public class RoleService : IRoleService
+    public class RoleService(IUnitOfWork unitOfWork) : IRoleService
     {
-        private readonly IUnitOfWork unitOfWork;
-
-        public RoleService(IUnitOfWork unitOfWork)
-        {
-            this.unitOfWork = unitOfWork;
-        }
-
         public async Task<List<Role>> GetRoles()
         {
-            var result = await this.unitOfWork.Roles.GetAllAsync();
+            var result = await unitOfWork.Roles.GetAllAsync();
             return result.ToList();
         }
     }

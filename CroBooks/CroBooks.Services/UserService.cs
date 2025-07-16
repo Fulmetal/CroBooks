@@ -10,26 +10,19 @@ using Microsoft.Extensions.Options;
 
 namespace CroBooks.Services
 {
-    public class UserService : IUserService
+    public class UserService(IOptions<AppSecuritySettingsOptions> securityOptions, IUnitOfWork unitOfWork)
+        : IUserService
     {
-        private readonly AppSecuritySettingsOptions securityOptions;
-        private readonly IUnitOfWork unitOfWork;
-
-        public UserService(IOptions<AppSecuritySettingsOptions> securityOptions
-            , IUnitOfWork unitOfWork)
-        {
-            this.securityOptions = securityOptions.Value;
-            this.unitOfWork = unitOfWork;
-        }
+        private readonly AppSecuritySettingsOptions _securityOptions = securityOptions.Value;
 
         public async Task<LoginResponseDto> Login(LoginRequestDto dto)
         {
-            if (securityOptions == null)
+            if (_securityOptions == null)
                 throw new ApplicationException("Configuration error");
 
             var response = new LoginResponseDto()
             {
-                Message = "User or passowrd is invalid;",
+                Message = "User or password is invalid;",
             };
 
             var user = await unitOfWork.Users.GetUserByEmailOrUsername(dto.UsernameOrEmail);
@@ -40,13 +33,12 @@ namespace CroBooks.Services
             if (role == null)
                 return response;
 
-            var passHash = SecurityHelper.CreatePasswordHash(dto.Password);
             var passwordValid = SecurityHelper.ValidatePassword(dto.Password, user.Password);
-            if (passwordValid)
-            {
-                response.Token = SecurityHelper.CreateToken(user.Id.ToString(), user.Username, user.FirstName, user.LastName, role.Name, securityOptions);
-                response.Message = "Login successful";
-            }
+            if (!passwordValid) 
+                return response;
+            
+            response.Token = SecurityHelper.CreateToken(user.Id.ToString(), user.Username, user.FirstName, user.LastName, role.Name, _securityOptions);
+            response.Message = "Login successful";
 
             return response;
         }
@@ -54,11 +46,7 @@ namespace CroBooks.Services
         public async Task<UserDto?> GetUser(int id)
         {
             var user = await unitOfWork.Users.FindAsync(id);
-            if (user == null)
-            {
-                return null;
-            }
-            return user.ToDto();
+            return user?.ToDto();
         }
 
         public async Task<List<UserDto>> GetUsers()

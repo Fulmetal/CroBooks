@@ -5,15 +5,8 @@ using CroBooks.Shared.Dto;
 
 namespace CroBooks.Services
 {
-    public class CompanyService : ICompanyService
+    public class CompanyService(IUnitOfWork unitOfWork) : ICompanyService
     {
-        private readonly IUnitOfWork unitOfWork;
-
-        public CompanyService(IUnitOfWork unitOfWork)
-        {
-            this.unitOfWork = unitOfWork;
-        }
-
         public async Task<CompanyDto?> GetCompany(int id)
         {
             var company = await unitOfWork.Companies.FindAsync(id);
