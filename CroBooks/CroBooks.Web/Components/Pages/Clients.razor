@@ -1,6 +1,7 @@
 ﻿@page "/clients"
 @using CroBooks.Shared.Dto
 @using CroBooks.Web.Components.Clients
+@using CroBooks.Web.Enumeration
 
 @inherits AppComponentBase
 @implements IDisposable
@@ -9,29 +10,48 @@
 
 <MudButton OnClick="AddClientClick">@LocalizeElement("ButtonAddNew")</MudButton>
 
-<ClientList ClientDtoList="clients" ></ClientList>
+<ClientList ClientDtoList="_clients" ></ClientList>
 
 @code {
-    [Inject] public HttpInterceptorService interceptor { get; set; } = null!;
-    [Inject] public ClientHttpClient httpClient { get; set; } = null!;
+    [Inject] public HttpInterceptorService Interceptor { get; set; } = null!;
+    [Inject] public ClientHttpClient HttpClient { get; set; } = null!;
     [Inject] public IDialogService DialogService { get; set; } = null!;
 
-    private List<ClientDto> clients = new();
+    private List<ClientDto> _clients = [];
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        interceptor.RegisterEvent();
+        Interceptor.RegisterEvent();
 
-        clients = await httpClient.GetClients();
+        await GetClientData();
     }
 
     public void Dispose()
     {
-        interceptor.DisposeEvent();
+        Interceptor.DisposeEvent();
+    }
+
+    private async Task GetClientData()
+    {
+        _clients = await HttpClient.GetClients();
     }
 
     private async Task AddClientClick()
     {
-        await DialogService.ShowAsync<ClientDialog>("Simple Dialog", new DialogOptions());
+        var options = new DialogOptions() { BackdropClick = false, CloseOnEscapeKey = true, CloseButton = true};
+        var parameters = new DialogParameters<ClientDialog>
+        {
+            { x => x.EditorMode, EditorMode.Create }
+        };
+        var dialog = await DialogService.ShowAsync<ClientDialog>("Create client", parameters, options);
+        
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            //In a real world scenario we would reload the data from the source here since we "removed" it in the dialog already.
+            Guid.TryParse(result.Data.ToString(), out Guid deletedServer);
+            await GetClientData();
+        }
     }
 }

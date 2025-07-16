@@ -67,6 +67,7 @@ namespace CroBooks.ApiService.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> AddCompany(CompanyDto dto)
         {
             var result = await this.companyService.AddCompany(dto);

@@ -56,13 +56,13 @@ namespace CroBooks.ApiService.Controllers
         [HttpPost]
         public async Task<IActionResult> AddClient(ClientDto dto)
         {
-            var result = await this.clientService.UpdateClient(dto);
+            var result = await this.clientService.AddClient(dto);
             if (result == null)
-                return NotFound(new ProblemDetails
+                return BadRequest(new ProblemDetails
                 {
-                    Title = "Client Not Found",
-                    Status = StatusCodes.Status404NotFound,
-                    Detail = $"Could not find client after insert."
+                    Title = "Cannot add this client.",
+                    Status = StatusCodes.Status400BadRequest,
+                    Detail = $"Cannot add this client."
                 });
             return Ok(result);
         }

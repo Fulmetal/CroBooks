@@ -1,4 +1,6 @@
-﻿namespace CroBooks.Shared.Dto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CroBooks.Shared.Dto
 {
     public class ClientDto
     {

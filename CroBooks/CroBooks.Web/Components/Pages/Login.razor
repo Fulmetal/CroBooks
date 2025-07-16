@@ -6,15 +6,15 @@
 
 <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Style="height: 80vh">
     <MudPaper Elevation="1">
-        <EditForm Model="@loginRequest" OnValidSubmit="OnValidUserSubmit">
+        <EditForm Model="@_loginRequest" OnValidSubmit="OnValidUserSubmit">
             <DataAnnotationsValidator />
             <MudCard>
                 <MudCardHeader>
                     <MudText Typo="Typo.h4">@Localize("Login")</MudText>
                 </MudCardHeader>
                 <MudCardContent>
-                    <MudTextField Variant="Variant.Text"  Label="@(LocalizeLabel(() => loginRequest.UsernameOrEmail))" @bind-Value="loginRequest.UsernameOrEmail" For="@(() => loginRequest.UsernameOrEmail)"></MudTextField>
-                    <MudTextField Variant="Variant.Text" InputType="InputType.Password" Label="@(LocalizeLabel(() => loginRequest.Password))" @bind-Value="loginRequest.Password" For="@(() => loginRequest.Password)"></MudTextField>
+                    <MudTextField Variant="Variant.Text"  Label="@(LocalizeLabel(() => _loginRequest.UsernameOrEmail))" @bind-Value="_loginRequest.UsernameOrEmail" For="@(() => _loginRequest.UsernameOrEmail)"></MudTextField>
+                    <MudTextField Variant="Variant.Text" InputType="InputType.Password" Label="@(LocalizeLabel(() => _loginRequest.Password))" @bind-Value="_loginRequest.Password" For="@(() => _loginRequest.Password)"></MudTextField>
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">@LocalizeElement("ButtonLogin")</MudButton>
@@ -25,28 +25,28 @@
 </MudStack>
 
 @code {
-    [Inject] public HttpInterceptorService interceptor { get; set; } = null!;
-    [Inject] public AuthHttpClient authHttpClient { get; set; } = null!;
+    [Inject] public HttpInterceptorService Interceptor { get; set; } = null!;
+    [Inject] public AuthHttpClient AuthHttpClient { get; set; } = null!;
     [Inject] public NavigationManager NavigationManager { get; set; } = null!;
     [Inject] public CustomAuthStateProvider AuthStateProvider { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
 
-    private LoginRequestDto loginRequest = new();
+    private LoginRequestDto _loginRequest = new();
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        interceptor.RegisterEvent();
+        Interceptor.RegisterEvent();
         await Task.CompletedTask;
     }
 
     public void Dispose()
     {
-        interceptor.DisposeEvent();
+        Interceptor.DisposeEvent();
     }
 
     private async Task OnValidUserSubmit()
     {
-        var result = await authHttpClient.Login(loginRequest);
+        var result = await AuthHttpClient.Login(_loginRequest);
 
         if (result == null)
         {
@@ -59,7 +59,7 @@
             Snackbar.Add(result.Message, Severity.Error);
         }
 
-        if (result != null && result.Token != null)
+        if (!string.IsNullOrEmpty(result.Token))
         {
             await AuthStateProvider.UpdateAuthenticationState(result.Token);
             NavigationManager.NavigateTo("/home", false);

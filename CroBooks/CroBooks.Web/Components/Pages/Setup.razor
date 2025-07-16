@@ -1,8 +1,5 @@
 ﻿@using CroBooks.Shared.Dto
 @using CroBooks.Shared.Dto.Request
-@using CroBooks.Web.Components.Layout
-@using CroBooks.Web.Resources.Models
-@using CroBooks.Web.Resources
 
 @page "/setup"
 @layout EmptyLayout
@@ -21,32 +18,32 @@
     <MudText Typo="@Typo.h3">@Localize("Setup_Setup")</MudText>
 
     <MudDivider></MudDivider>
-    <MudCarousel @ref="carousel" @bind-SelectedIndex="wizardStep" Style="height:70vh;" Class="mud-width-full" ShowArrows="false" ShowBullets="false" EnableSwipeGesture="false" AutoCycle="false" TData="string">
+    <MudCarousel @bind-SelectedIndex="_wizardStep" Style="height:70vh;" Class="mud-width-full" ShowArrows="false" ShowBullets="false" EnableSwipeGesture="false" AutoCycle="false" TData="string">
         <MudCarouselItem Transition="Transition.Slide">
 
-            @if (adminExists)
+            @if (_adminExists)
             {
                 <MudText Typo="Typo.h6">User created</MudText>
             }
             else
             {
-                <EditForm Model="@userRequest" OnValidSubmit="OnValidUserSubmit">
+                <EditForm Model="@_userRequest" OnValidSubmit="OnValidUserSubmit">
                     <DataAnnotationsValidator />
                     <MudCard>
                         <MudCardHeader><MudText Typo="Typo.h5">@Localize("Setup_CreateAdmin")</MudText></MudCardHeader>
                         <MudCardContent>
-                            <MudTextField Variant="Variant.Text" Label="@(LocalizeLabel(() => userRequest.FirstName))" @bind-Value="userRequest.FirstName" For="@(() => userRequest.FirstName)"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => userRequest.LastName))" @bind-Value="userRequest.LastName" For="@(() => userRequest.LastName)"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => userRequest.Email))" @bind-Value="userRequest.Email" For="@(() => userRequest.Email)"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => userRequest.Username))" @bind-Value="userRequest.Username" For="@(() => userRequest.Username)"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => userRequest.Password))" @bind-Value="userRequest.Password" For="@(() => userRequest.Password)" InputType="InputType.Password"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => userRequest.ConfirmPassword))" @bind-Value="userRequest.ConfirmPassword" For="@(() => userRequest.ConfirmPassword)" InputType="InputType.Password"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Label="@(LocalizeLabel(() => _userRequest.FirstName))" @bind-Value="_userRequest.FirstName" For="@(() => _userRequest.FirstName)"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.LastName))" @bind-Value="_userRequest.LastName" For="@(() => _userRequest.LastName)"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.Email))" @bind-Value="_userRequest.Email" For="@(() => _userRequest.Email)"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.Username))" @bind-Value="_userRequest.Username" For="@(() => _userRequest.Username)"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.Password))" @bind-Value="_userRequest.Password" For="@(() => _userRequest.Password)" InputType="InputType.Password"></MudTextField>
+                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.ConfirmPassword))" @bind-Value="_userRequest.ConfirmPassword" For="@(() => _userRequest.ConfirmPassword)" InputType="InputType.Password"></MudTextField>
                         </MudCardContent>
                         <MudCardActions>
-                            @if (wizardStep == 0)
+                            @if (_wizardStep == 0)
                             {
-                                <MudButton Disabled="@userInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
-                                    @if (companyInsertBusy)
+                                <MudButton Disabled="@_userInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+                                    @if (_companyInsertBusy)
                                     {
                                         <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
                                         <MudText Class="ms-2">@LocalizeElement("ButtonProcessing")</MudText>
@@ -64,26 +61,26 @@
 
         </MudCarouselItem>
         <MudCarouselItem Transition="Transition.Slide">
-            <EditForm Model="@companyDto" OnValidSubmit="OnValidCompanySubmit">
+            <EditForm Model="@_companyDto" OnValidSubmit="OnValidCompanySubmit">
                 <DataAnnotationsValidator />
                 <MudCard>
                     <MudCardHeader><MudText Typo="Typo.h5">@Localize("Setup_CreateCompany")</MudText></MudCardHeader>
                     <MudCardContent>
-                        <MudTextField Variant="Variant.Text" Label="@(LocalizeLabel(() => companyDto.Name))" @bind-Value="companyDto.Name" For="@(() => companyDto.Name)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.Address))" @bind-Value="companyDto.Address" For="@(() => companyDto.Address)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.PostalCode))" @bind-Value="companyDto.PostalCode" For="@(() => companyDto.PostalCode)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.City))" @bind-Value="companyDto.City" For="@(() => companyDto.City)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.Country))" @bind-Value="companyDto.Country" For="@(() => companyDto.Country)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.TaxNumber))" @bind-Value="companyDto.TaxNumber" For="@(() => companyDto.TaxNumber)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.IBAN))" @bind-Value="companyDto.IBAN" For="@(() => companyDto.IBAN)"></MudTextField>
-                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.RegisteredActivity))" @bind-Value="companyDto.RegisteredActivity" For="@(() => companyDto.RegisteredActivity)"></MudTextField>
-                        <MudDatePicker Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => companyDto.RegistrationDate))" @bind-Date="companyDto.RegistrationDate" For="@(() => companyDto.RegistrationDate)"></MudDatePicker>
+                        <MudTextField Variant="Variant.Text" Label="@(LocalizeLabel(() => _companyDto.Name))" @bind-Value="_companyDto.Name" For="@(() => _companyDto.Name)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _companyDto.Address))" @bind-Value="_companyDto.Address" For="@(() => _companyDto.Address)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _companyDto.PostalCode))" @bind-Value="_companyDto.PostalCode" For="@(() => _companyDto.PostalCode)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _companyDto.City))" @bind-Value="_companyDto.City" For="@(() => _companyDto.City)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _companyDto.Country))" @bind-Value="_companyDto.Country" For="@(() => _companyDto.Country)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _companyDto.TaxNumber))" @bind-Value="_companyDto.TaxNumber" For="@(() => _companyDto.TaxNumber)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _companyDto.IBAN))" @bind-Value="_companyDto.IBAN" For="@(() => _companyDto.IBAN)"></MudTextField>
+                        <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _companyDto.RegisteredActivity))" @bind-Value="_companyDto.RegisteredActivity" For="@(() => _companyDto.RegisteredActivity)"></MudTextField>
+                        <MudDatePicker Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _companyDto.RegistrationDate))" @bind-Date="_companyDto.RegistrationDate" For="@(() => _companyDto.RegistrationDate)"></MudDatePicker>
                     </MudCardContent>
                     <MudCardActions>
-                        @if (wizardStep == 1)
+                        @if (_wizardStep == 1)
                         {
-                            <MudButton Disabled="@companyInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
-                                @if (companyInsertBusy)
+                            <MudButton Disabled="@_companyInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+                                @if (_companyInsertBusy)
                                 {
                                     <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
                                     <MudText Class="ms-2">@LocalizeElement("ButtonProcessing")</MudText>
@@ -102,64 +99,63 @@
 </MudStack>
 
 @code {
-    [Inject] HttpInterceptorService interceptor { get; set; } = null!;
+    [Inject] HttpInterceptorService Interceptor { get; set; } = null!;
     [Inject] public UserHttpClient UserHttpClient { get; set; } = null!;
     [Inject] public CompanyHttpClient CompanyHttpClient { get; set; } = null!;
     [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
-    private bool adminExists = false;
-    private bool companyExists = false;
-    private CreateUserRequestDto userRequest = new() { RoleId = 1 };
-    private CompanyDto companyDto = new() { IsDefault = true };
-    private MudCarousel<string> carousel = null!;
-    private int wizardStep = 0;
-    bool userInsertBusy = false;
-    bool companyInsertBusy = false;
+    private bool _adminExists = false;
+    private bool _companyExists = false;
+    private CreateUserRequestDto _userRequest = new() { RoleId = 1 };
+    private CompanyDto _companyDto = new() { IsDefault = true };
+    private int _wizardStep = 0;
+    bool _userInsertBusy = false;
+    bool _companyInsertBusy = false;
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        interceptor.RegisterEvent();
-        adminExists = await UserHttpClient.CheckAdminExists();
-        companyExists = await CompanyHttpClient.CheckAnyCompanyExists();
+        Interceptor.RegisterEvent();
+        _adminExists = await UserHttpClient.CheckAdminExists();
+        _companyExists = await CompanyHttpClient.CheckAnyCompanyExists();
         WizardNextStep();
     }
 
     public void Dispose()
     {
-        interceptor.DisposeEvent();
+        Interceptor.DisposeEvent();
     }
 
     protected async Task OnValidUserSubmit()
     {
-        userInsertBusy = true;
-        var result = await UserHttpClient.SetupAdminUser(userRequest);
+        _userInsertBusy = true;
+        var result = await UserHttpClient.SetupAdminUser(_userRequest);
         if (result != null)
         {
-            adminExists = true;
+            _adminExists = true;
             WizardNextStep();
         }
-        userInsertBusy = false;
+        _userInsertBusy = false;
     }
 
     protected async Task OnValidCompanySubmit()
     {
-        companyInsertBusy = true;
-        var result = await CompanyHttpClient.AddCompany(companyDto);
+        _companyInsertBusy = true;
+        var result = await CompanyHttpClient.AddCompany(_companyDto);
         if (result != null)
         {
-            companyExists = true;
+            _companyExists = true;
             WizardNextStep();
         }
-        companyInsertBusy = false;
+        _companyInsertBusy = false;
     }
 
-    protected void WizardNextStep()
+    private async Task WizardNextStep()
     {
-        if (companyExists)
-            wizardStep = 0;
-        if (adminExists)
-            wizardStep = 1;
-        if (adminExists && companyExists)
+        if (_companyExists)
+            _wizardStep = 0;
+        if (_adminExists)
+            _wizardStep = 1;
+        if (_adminExists && _companyExists)
             NavigationManager.NavigateTo("/home", false);
     }
 }

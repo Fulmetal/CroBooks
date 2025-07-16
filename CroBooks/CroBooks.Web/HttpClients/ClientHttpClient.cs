@@ -30,5 +30,10 @@ namespace CroBooks.Web.HttpClients
         {
             return await PutAsJsonAsync<ClientDto, ClientDto>(dto, $"{controllerBase}/");
         }
+
+        public async Task DeleteClient(ClientDto dto)
+        {
+            await DeleteAsJsonAsync<ClientDto>(dto, $"{controllerBase}/");
+        }
     }
 }

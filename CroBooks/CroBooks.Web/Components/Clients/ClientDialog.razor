@@ -1,47 +1,67 @@
 ﻿@using CroBooks.Shared.Dto
 @using CroBooks.Web.Enumeration
+@using System.ComponentModel.DataAnnotations
+
 @inherits AppComponentBase
 
 <MudDialog>
+    
     <TitleContent>
-        <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.Filled.DeleteForever" Class="mr-3 mb-n1" />
-            Delete server?
-        </MudText>
+        @Localize("Client")
     </TitleContent>
     <DialogContent>
-        <ClientForm Client="Client"></ClientForm>
+        <ClientForm @ref="_clientForm" Client="Client"></ClientForm>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">@LocalizeElement("ButtonSubmit")</MudButton>
+        <MudButton Color="Color.Error" OnClick="Cancel">Cancel</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnSubmit">@LocalizeElement("ButtonSubmit")</MudButton>
     </DialogActions>
 </MudDialog>
 
 @code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = null!;
+
     [Parameter]
     public ClientDto Client { get; set; } = new();
-
     [Parameter]
     public EditorMode EditorMode { get; set; } = EditorMode.View;
 
     [Inject] public ClientHttpClient ClientHttpClient { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
 
-    private IMudDialogInstance MudDialog { get; set; } = null!;
-
-    private void Cancel() => MudDialog.Cancel();
-
-    private async Task OnValidSubmit(EditContext context)
+    private ClientForm _clientForm = null!;
+    
+    private void Cancel()
     {
-        if (EditorMode == EditorMode.Create)
+        MudDialog.Cancel();
+    }   
+
+    private async Task OnSubmit()
+    {
+        if (!_clientForm.Validate())
+            return;
+        
+        switch (EditorMode)
         {
-            var result = await ClientHttpClient.AddClient(Client);
+            case EditorMode.Create:
+            {
+                var result = await ClientHttpClient.AddClient(Client);
+                break;
+            }
+            case EditorMode.Edit:
+            {
+                var result = await ClientHttpClient.UpdateClient(Client);
+                break;
+            }
+            case EditorMode.Delete:
+                await ClientHttpClient.DeleteClient(Client);
+                break;
+            case EditorMode.View:
+            default:
+                break;
         }
-        if (EditorMode == EditorMode.Edit)
-        {
-            var result = await ClientHttpClient.UpdateClient(Client);
-        }
+
         StateHasChanged();
 
         Snackbar.Add("Server Deleted", Severity.Success);
