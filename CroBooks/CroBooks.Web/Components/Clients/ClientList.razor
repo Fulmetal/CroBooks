@@ -27,7 +27,7 @@
     [Parameter]
     public List<ClientDto> ClientDtoList { get; set; } = new();
 
-    private string GetFullAddress(ClientDto client)
+    private static string GetFullAddress(ClientDto client)
     {
         var parts = new List<string>();
         if (!string.IsNullOrWhiteSpace(client.Address)) parts.Add(client.Address);

@@ -1,6 +1,5 @@
 ﻿@using CroBooks.Shared.Dto
 @using CroBooks.Web.Enumeration
-@using System.ComponentModel.DataAnnotations
 
 @inherits AppComponentBase
 
@@ -13,8 +12,8 @@
         <ClientForm @ref="_clientForm" Client="Client"></ClientForm>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Error" OnClick="Cancel">Cancel</MudButton>
-        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnSubmit">@LocalizeElement("ButtonSave")</MudButton>
+        <MudButton Color="Color.Error" OnClick="@Cancel">Cancel</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSubmit">@LocalizeElement("ButtonSave")</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -46,12 +45,12 @@
         {
             case EditorMode.Create:
             {
-                var result = await ClientHttpClient.AddClient(Client);
+                _ = await ClientHttpClient.AddClient(Client);
                 break;
             }
             case EditorMode.Edit:
             {
-                var result = await ClientHttpClient.UpdateClient(Client);
+                _ = await ClientHttpClient.UpdateClient(Client);
                 break;
             }
             case EditorMode.Delete:
