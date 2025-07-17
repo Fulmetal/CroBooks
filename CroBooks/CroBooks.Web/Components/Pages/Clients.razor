@@ -7,9 +7,10 @@
 @inherits AppComponentBase
 @implements IDisposable
 
-<PageHeading>@Localize("Clients_Title")</PageHeading>
-
-<MudButton OnClick="@AddClientClick">@LocalizeElement("ButtonAddNew")</MudButton>
+<MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Start">
+    <PageHeading>@Localize("Clients_Title")</PageHeading>
+    <MudButton Button Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" OnClick="@AddClientClick">@LocalizeElement("ButtonAdd")</MudButton>
+</MudStack>
 
 <ClientList ClientDtoList="_clients" ></ClientList>
 

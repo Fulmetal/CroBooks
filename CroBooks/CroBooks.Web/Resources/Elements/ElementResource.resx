@@ -147,4 +147,10 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="ButtonNew" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="ButtonNewString" xml:space="preserve">
+    <value>New {0}</value>
+  </data>
 </root>

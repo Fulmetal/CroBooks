@@ -147,4 +147,13 @@
   <data name="Setup_Setup" xml:space="preserve">
     <value>Setup</value>
   </data>
+  <data name="Clients_Title" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="Menu_Clients" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="Client" xml:space="preserve">
+    <value>Client</value>
+  </data>
 </root>

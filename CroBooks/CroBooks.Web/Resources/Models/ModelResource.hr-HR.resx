@@ -171,4 +171,10 @@
   <data name="UsernameOrEmail" xml:space="preserve">
     <value>Korisničko ime ili e-pošta</value>
   </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Napomena</value>
+  </data>
 </root>

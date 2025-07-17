@@ -5,11 +5,11 @@
     </PageTitle>
 }
 
-<MudText Typo="Typo.h4">
+<MudText Typo="Typo.h4" Class="mb-3">
     @ChildContent
 </MudText>
 
 @code {
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
     [Parameter] public bool SetAsPageTitle { get; set; } = true;
 }
