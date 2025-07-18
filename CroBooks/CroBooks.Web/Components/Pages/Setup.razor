@@ -27,7 +27,8 @@
             }
             else
             {
-                <EditForm Model="@_userRequest" OnValidSubmit="OnValidUserSubmit">
+                //this should be removed in issue #2, currently is a possible breaking change
+                <EditForm Model="@_userRequest" OnValidSubmit="OnUserSubmit">
                     <DataAnnotationsValidator />
                     <MudCard>
                         <MudCardHeader><MudText Typo="Typo.h5">@Localize("Setup_CreateAdmin")</MudText></MudCardHeader>
@@ -42,17 +43,8 @@
                         <MudCardActions>
                             @if (_wizardStep == 0)
                             {
-                                <MudButton Disabled="@_userInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
-                                    @if (_companyInsertBusy)
-                                    {
-                                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                                        <MudText Class="ms-2">@LocalizeElement("ButtonProcessing")</MudText>
-                                    }
-                                    else
-                                    {
-                                        <MudText>@LocalizeElement("ButtonCreate")</MudText>
-                                    }
-                                </MudButton>
+                                <MudSpacer />
+                                <SaveButton IsComponentBusy="ComponentBusy" SaveButtonClicked="OnUserSubmit" />
                             }
                         </MudCardActions>
                     </MudCard>
@@ -66,18 +58,8 @@
                     <CompanyForm @ref="_companyForm" CompanyDto="_companyDto"></CompanyForm>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton Disabled="@_companyInsertBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled"
-                               Color="Color.Primary" Class="ml-auto" OnClick="@OnCompanySubmit">
-                        @if (_companyInsertBusy)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                            <MudText Class="ms-2">@LocalizeElement("ButtonProcessing")</MudText>
-                        }
-                        else
-                        {
-                            <MudText>@LocalizeElement("ButtonSave")</MudText>
-                        }
-                    </MudButton>
+                    <MudSpacer />
+                    <SaveButton IsComponentBusy="ComponentBusy" SaveButtonClicked="@OnCompanySubmit" />
                 </MudCardActions>
             </MudCard>
         </MudCarouselItem>
@@ -96,8 +78,8 @@
     private CompanyDto _companyDto = new(isDefault: true);
     private CompanyForm _companyForm = null!;
     private int _wizardStep;
-    bool _userInsertBusy;
-    bool _companyInsertBusy;
+    // bool _userInsertBusy;
+    // bool _companyInsertBusy;
 
     protected override async Task OnInitializedAsync()
     {
@@ -112,16 +94,16 @@
         Interceptor.DisposeEvent();
     }
 
-    private async Task OnValidUserSubmit()
+    private async Task OnUserSubmit()
     {
-        _userInsertBusy = true;
+        ToggleBusy();
         var result = await UserHttpClient.SetupAdminUser(_userRequest);
         if (result != null)
         {
             _adminExists = true;
             WizardNextStep();
         }
-        _userInsertBusy = false;
+        ToggleBusy();
     }
 
     private async Task OnCompanySubmit()
@@ -129,14 +111,14 @@
         if (!_companyForm.Validate())
             return;
         
-        _companyInsertBusy = true;
+        ToggleBusy();
         var result = await CompanyHttpClient.AddCompany(_companyDto);
         if (result != null)
         {
             _companyExists = true;
             WizardNextStep();
         }
-        _companyInsertBusy = false;
+        ToggleBusy();
     }
 
     private void WizardNextStep()

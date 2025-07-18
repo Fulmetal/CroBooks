@@ -1,0 +1,27 @@
+@inherits AppComponentBase
+
+<MudButton Disabled="@ComponentBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+           Color="Color.Primary" OnClick="@OnSubmit">
+    @if (ComponentBusy)
+    {
+        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+        <MudText Class="ms-2">@LocalizeElement("ButtonProcessing")</MudText>
+    }
+    else
+    {
+        <MudText>@LocalizeElement("ButtonSave")</MudText>
+    }
+</MudButton>
+
+@code {
+    [Parameter] public bool IsComponentBusy { get; set; }
+
+    [Parameter] public EventCallback SaveButtonClicked { get; set; }
+
+    private async Task OnSubmit()
+    {
+        if (SaveButtonClicked.HasDelegate)
+            await SaveButtonClicked.InvokeAsync();
+    }
+
+}
