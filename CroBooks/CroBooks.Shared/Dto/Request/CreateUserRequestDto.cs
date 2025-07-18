@@ -4,6 +4,11 @@ namespace CroBooks.Shared.Dto.Request
 {
     public class CreateUserRequestDto
     {
+        public CreateUserRequestDto(int roleId)
+        {
+            RoleId = roleId;
+        }
+
         [Required]
         public string FirstName { get; set; } = string.Empty;
         [Required]
