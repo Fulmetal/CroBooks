@@ -6,21 +6,28 @@ namespace CroBooks.Web.Components
 {
     public abstract class AppComponentBase : ComponentBase//, IDisposable
     {
-        [Inject] TranslationHelper TranslationHelper { get; set; }
-        
-        public string LocalizeLabel<T>(Expression<Func<T>> propertyExpression)
+        [Inject] private TranslationHelper TranslationHelper { get; set; } = null!;
+
+        protected bool ComponentBusy;
+
+        protected string LocalizeLabel<T>(Expression<Func<T>> propertyExpression)
         {
             return TranslationHelper.GetModelLabelTranslation(propertyExpression);
         }
 
-        public string LocalizeElement(string key)
+        protected string LocalizeElement(string key)
         {
             return TranslationHelper.GetElementTranslation(key);
         }
 
-        public string Localize(string key)
+        protected string Localize(string key)
         {
             return TranslationHelper.GetAppTranslation(key);
+        }
+
+        protected void ToggleBusy()
+        {
+            ComponentBusy = !ComponentBusy;
         }
     }
 }

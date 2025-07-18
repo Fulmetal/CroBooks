@@ -13,7 +13,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Error" OnClick="@Cancel">Cancel</MudButton>
-        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnSubmit">@LocalizeElement("ButtonSave")</MudButton>
+        <SaveButton IsComponentBusy="ComponentBusy" SaveButtonClicked="OnSubmit"></SaveButton>
     </DialogActions>
 </MudDialog>
 

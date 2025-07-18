@@ -11,18 +11,8 @@
         <CompanyForm @ref="_companyForm" CompanyDto="_companyDto"></CompanyForm>
     </MudCardContent>
     <MudCardActions>
-        <MudButton Disabled="@_componentBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled"
-                   Color="Color.Primary" Class="ml-auto" OnClick="@OnSubmit">
-            @if (_componentBusy)
-            {
-                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                <MudText Class="ms-2">@LocalizeElement("ButtonProcessing")</MudText>
-            }
-            else
-            {
-                <MudText>@LocalizeElement("ButtonSave")</MudText>
-            }
-        </MudButton>
+        <MudSpacer />
+        <SaveButton IsComponentBusy="ComponentBusy" SaveButtonClicked="@OnSubmit"/>
     </MudCardActions>
 </MudCard>
 
@@ -32,7 +22,6 @@
 
     private CompanyForm _companyForm = null!;
     private CompanyDto _companyDto = new();
-    bool _componentBusy;
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,9 +39,9 @@
         if (!_companyForm.Validate())
             return;
 
-        _componentBusy = true;
+        ToggleBusy();
         _ = await CompanyHttpClient.UpdateCompany(_companyDto);
-        _componentBusy = false;
+        ToggleBusy();
     }
 
 }
