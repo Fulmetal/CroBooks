@@ -32,27 +32,17 @@ namespace CroBooks.Domain.Companies
             this.TaxNumber = dto.TaxNumber;
             this.IBAN = dto.IBAN;
             this.RegisteredActivity = dto.RegisteredActivity;
-            this.RegistrationDate = dto.RegistrationDate.Value.ToUniversalTime();
+            if (dto.RegistrationDate != null) this.RegistrationDate = dto.RegistrationDate.Value.ToUniversalTime();
             this.IsDefault = dto.IsDefault;
         }
 
 
         public CompanyDto ToDto()
         {
-            return new CompanyDto
-            {
-                Id = this.Id,
-                Name = this.Name,
-                Address = this.Address,
-                PostalCode = this.PostalCode,
-                City = this.City,
-                Country = this.Country,
-                TaxNumber = this.TaxNumber,
-                IBAN = this.IBAN,
-                RegisteredActivity = this.RegisteredActivity,
-                RegistrationDate = this.RegistrationDate,
-                IsDefault = this.IsDefault
-            };
+            return new CompanyDto(id: this.Id, name: this.Name, address: this.Address, postalCode: this.PostalCode,
+                city: this.City, country: this.Country, taxNumber: this.TaxNumber, iban: this.IBAN,
+                registeredActivity: this.RegisteredActivity, registrationDate: this.RegistrationDate,
+                isDefault: this.IsDefault);
         }
 
         public void UpdateFromDto(Company company, CompanyDto dto)

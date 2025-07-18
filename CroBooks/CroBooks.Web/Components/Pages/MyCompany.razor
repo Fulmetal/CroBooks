@@ -6,52 +6,31 @@
 
 <PageHeading>@Localize("MyCompany_Title")</PageHeading>
 
-<EditForm Model="@_companyDto" OnValidSubmit="OnValidCompanySubmit">
-    <DataAnnotationsValidator/>
-    <MudCard>
-        <MudCardContent>
-            <MudTextField Label="@(LocalizeLabel(() => _companyDto.Name))" @bind-Value="_companyDto.Name"
-                          For="@(() => _companyDto.Name)"></MudTextField>
-            <MudTextField Label="@(LocalizeLabel(() => _companyDto.Address))" @bind-Value="_companyDto.Address"
-                          For="@(() => _companyDto.Address)"></MudTextField>
-            <MudTextField Label="@(LocalizeLabel(() => _companyDto.PostalCode))" @bind-Value="_companyDto.PostalCode"
-                          For="@(() => _companyDto.PostalCode)"></MudTextField>
-            <MudTextField Label="@(LocalizeLabel(() => _companyDto.City))" @bind-Value="_companyDto.City"
-                          For="@(() => _companyDto.City)"></MudTextField>
-            <MudTextField Label="@(LocalizeLabel(() => _companyDto.Country))" @bind-Value="_companyDto.Country"
-                          For="@(() => _companyDto.Country)"></MudTextField>
-            <MudTextField Label="@(LocalizeLabel(() => _companyDto.TaxNumber))" @bind-Value="_companyDto.TaxNumber"
-                          For="@(() => _companyDto.TaxNumber)"></MudTextField>
-            <MudTextField Label="@(LocalizeLabel(() => _companyDto.IBAN))" @bind-Value="_companyDto.IBAN"
-                          For="@(() => _companyDto.IBAN)"></MudTextField>
-            <MudTextField Label="@(LocalizeLabel(() => _companyDto.RegisteredActivity))"
-                          @bind-Value="_companyDto.RegisteredActivity"
-                          For="@(() => _companyDto.RegisteredActivity)"></MudTextField>
-            <MudDatePicker Label="@(LocalizeLabel(() => _companyDto.RegistrationDate))"
-                           @bind-Date="_companyDto.RegistrationDate"
-                           For="@(() => _companyDto.RegistrationDate)"></MudDatePicker>
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Disabled="@_componentBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled"
-                       Color="Color.Primary" Class="ml-auto">
-                @if (_componentBusy)
-                {
-                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                    <MudText Class="ms-2">@LocalizeElement("ButtonProcessing")</MudText>
-                }
-                else
-                {
-                    <MudText>@LocalizeElement("ButtonSave")</MudText>
-                }
-            </MudButton>
-        </MudCardActions>
-    </MudCard>
-</EditForm>
+<MudCard>
+    <MudCardContent>
+        <CompanyForm @ref="_companyForm" CompanyDto="_companyDto"></CompanyForm>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Disabled="@_componentBusy" ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                   Color="Color.Primary" Class="ml-auto" OnClick="@OnSubmit">
+            @if (_componentBusy)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                <MudText Class="ms-2">@LocalizeElement("ButtonProcessing")</MudText>
+            }
+            else
+            {
+                <MudText>@LocalizeElement("ButtonSave")</MudText>
+            }
+        </MudButton>
+    </MudCardActions>
+</MudCard>
 
 @code {
     [Inject] HttpInterceptorService Interceptor { get; set; } = null!;
     [Inject] CompanyHttpClient CompanyHttpClient { get; set; } = null!;
 
+    private CompanyForm _companyForm = null!;
     private CompanyDto _companyDto = new();
     bool _componentBusy;
 
@@ -66,8 +45,11 @@
         Interceptor.DisposeEvent();
     }
 
-    protected async Task OnValidCompanySubmit()
+    private async Task OnSubmit()
     {
+        if (!_companyForm.Validate())
+            return;
+
         _componentBusy = true;
         _ = await CompanyHttpClient.UpdateCompany(_companyDto);
         _componentBusy = false;

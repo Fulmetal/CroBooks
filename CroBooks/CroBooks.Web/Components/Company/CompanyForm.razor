@@ -1,0 +1,41 @@
+@using CroBooks.Shared.Dto
+
+@inherits AppComponentBase
+
+<MudForm @ref="_form" @bind-IsValid="@_success" @bind-Errors="@_errors">
+    <MudTextField Label="@(LocalizeLabel(() => CompanyDto.Name))" @bind-Value="CompanyDto.Name"
+                  For="@(() => CompanyDto.Name)" Required="true"></MudTextField>
+    <MudTextField Label="@(LocalizeLabel(() => CompanyDto.Address))" @bind-Value="CompanyDto.Address"
+                  For="@(() => CompanyDto.Address)" Required="true"></MudTextField>
+    <MudTextField Label="@(LocalizeLabel(() => CompanyDto.PostalCode))" @bind-Value="CompanyDto.PostalCode"
+                  For="@(() => CompanyDto.PostalCode)" Required="true"></MudTextField>
+    <MudTextField Label="@(LocalizeLabel(() => CompanyDto.City))" @bind-Value="CompanyDto.City"
+                  For="@(() => CompanyDto.City)" Required="true"></MudTextField>
+    <MudTextField Label="@(LocalizeLabel(() => CompanyDto.Country))" @bind-Value="CompanyDto.Country"
+                  For="@(() => CompanyDto.Country)" Required="true"></MudTextField>
+    <MudTextField Label="@(LocalizeLabel(() => CompanyDto.TaxNumber))" @bind-Value="CompanyDto.TaxNumber"
+                  For="@(() => CompanyDto.TaxNumber)" Required="true"></MudTextField>
+    <MudTextField Label="@(LocalizeLabel(() => CompanyDto.IBAN))" @bind-Value="CompanyDto.IBAN"
+                  For="@(() => CompanyDto.IBAN)" Required="true"></MudTextField>
+    <MudTextField Label="@(LocalizeLabel(() => CompanyDto.RegisteredActivity))"
+                  @bind-Value="CompanyDto.RegisteredActivity"
+                  For="@(() => CompanyDto.RegisteredActivity)" Required="true"></MudTextField>
+    <MudDatePicker Label="@(LocalizeLabel(() => CompanyDto.RegistrationDate))"
+                   @bind-Date="CompanyDto.RegistrationDate"
+                   For="@(() => CompanyDto.RegistrationDate)" Required="true"></MudDatePicker>
+</MudForm>
+
+@code {
+    [Parameter]
+    public CompanyDto CompanyDto { get; set; } = new();
+    
+    bool _success;
+    string[] _errors = [];
+    MudForm _form = null!;
+
+    public bool Validate()
+    {
+        _form.Validate();
+        return _success;
+    }
+}
