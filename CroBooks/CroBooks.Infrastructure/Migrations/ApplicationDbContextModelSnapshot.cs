@@ -17,7 +17,7 @@ namespace CroBooks.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -32,15 +32,18 @@ namespace CroBooks.Infrastructure.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -50,30 +53,36 @@ namespace CroBooks.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("TaxNumber")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -93,15 +102,18 @@ namespace CroBooks.Infrastructure.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -109,9 +121,10 @@ namespace CroBooks.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("IBAN")
+                    b.Property<string>("Iban")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("boolean");
@@ -121,22 +134,26 @@ namespace CroBooks.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("RegisteredActivity")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("TaxNumber")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");

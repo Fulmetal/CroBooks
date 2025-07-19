@@ -23,14 +23,14 @@ namespace CroBooks.Domain.Contacts
 
         public Contact(ContactDto dto)
         {
-            this.Id = dto.Id;
-            this.Name = dto.Name;
-            this.Email = dto.Email;
-            this.Address = dto.Address;
-            this.City = dto.City;
-            this.PostalCode = dto.PostalCode;
-            this.Country = dto.Country;
-            this.Note = dto.Note;
+            Id = dto.Id;
+            Name = dto.Name;
+            Email = dto.Email;
+            Address = dto.Address;
+            City = dto.City;
+            PostalCode = dto.PostalCode;
+            Country = dto.Country;
+            Note = dto.Note;
         }
 
 
@@ -49,15 +49,15 @@ namespace CroBooks.Domain.Contacts
             };
         }
 
-        public void UpdateFromDto(Contact contact, ContactDto dto)
+        public static void UpdateFromDto(Contact contact, ContactDto dto)
         {
-            this.Name = dto.Name;
-            this.Email = dto.Email;
-            this.Address = dto.Address;
-            this.PostalCode = dto.PostalCode;
-            this.City = dto.City;
-            this.Country = dto.Country;
-            this.Note = dto.Note;
+            contact.Name = dto.Name;
+            contact.Email = dto.Email;
+            contact.Address = dto.Address;
+            contact.PostalCode = dto.PostalCode;
+            contact.City = dto.City;
+            contact.Country = dto.Country;
+            contact.Note = dto.Note;
         }
     }
 }

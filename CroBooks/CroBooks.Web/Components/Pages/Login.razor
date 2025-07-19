@@ -48,12 +48,6 @@
     {
         var result = await AuthHttpClient.Login(_loginRequest);
 
-        if (result == null)
-        {
-            Snackbar.Add("There was an error logging in.", Severity.Error);
-            return;
-        }
- 
         if (!string.IsNullOrEmpty(result.Message) && string.IsNullOrEmpty(result.Token))
         {
             Snackbar.Add(result.Message, Severity.Error);

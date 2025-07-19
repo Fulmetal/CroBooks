@@ -6,12 +6,12 @@ namespace CroBooks.Web.HttpClients.Base
         HttpClient HttpClient { get; }
 
         Task DeleteAsJsonAsync<T>(T dto, string endpoint);
-        Task<Tr> GetAsync<T, Tr>(T dto, string endpoint) where Tr : new();
-        Task<Tr> GetAsync<Tr>(string endpoint) where Tr : new();
-        Task<Tr> PostAsJsonAsync<T, Tr>(T dto, string endpoint) where Tr : new();
-        Task<Tr> PostAsync<Tr>(string endpoint) where Tr : new();
-        Task<Tr> PutAsJsonAsync<T, Tr>(T dto, string endpoint) where Tr : new();
-        Task<Tr> PutAsync<Tr>(string endpoint) where Tr : new();
+        Task<TR> GetAsync<T, TR>(T dto, string endpoint) where TR : new();
+        Task<TR> GetAsync<TR>(string endpoint) where TR : new();
+        Task<TR> PostAsJsonAsync<T, TR>(T dto, string endpoint) where TR : new();
+        Task<TR> PostAsync<TR>(string endpoint) where TR : new();
+        Task<TR> PutAsJsonAsync<T, TR>(T dto, string endpoint) where TR : new();
+        Task<TR> PutAsync<TR>(string endpoint) where TR : new();
         Task PutAsync(string endpoint);
     }
 }

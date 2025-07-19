@@ -1,44 +1,41 @@
-﻿@using System.Globalization
-@using Microsoft.AspNetCore.Localization;
-@rendermode InteractiveServer
+﻿@rendermode InteractiveServer
 
-@if (cultures != null)
-{
-    <MudSelect Placeholder="Select culture" @bind-Value="Culture" FullWidth="false" ToStringFunc="@convertFunc" OpenIcon="@Icons.Material.Filled.Language" AdornmentColor="Color.Tertiary">
-        @foreach (var culture in cultures)
-        {
-            <MudSelectItem Value="@(CultureInfo.GetCultureInfo(culture.Key))" />
-        }
-    </MudSelect>
-}
+<MudSelect Placeholder="Select culture" @bind-Value="Culture" FullWidth="false" ToStringFunc="@_convertFunc" OpenIcon="@Icons.Material.Filled.Language" AdornmentColor="Color.Tertiary">
+    @foreach (var culture in _cultures)
+    {
+        <MudSelectItem Value="@(CultureInfo.GetCultureInfo(culture.Key))" />
+    }
+</MudSelect>
+
 
 @code {
     [Inject] public NavigationManager NavigationManager { get; set; } = null!;
     [Inject] public IConfiguration Configuration { get; set; } = null!;
 
-    private Dictionary<string, string> cultures = new Dictionary<string, string>();
+    private Dictionary<string, string?> _cultures = new();
 
     protected override void OnInitialized()
     {
-        var cultureSection = Configuration?.GetSection("Cultures");
-        if (cultureSection != null)
+        var cultureSection = Configuration.GetSection("Cultures");
+        if (!string.IsNullOrEmpty(cultureSection.Value))
         {
-            cultures = cultureSection.GetChildren()?.ToDictionary(x => x.Key, x => x.Value) ?? new Dictionary<string, string>();
+            _cultures = cultureSection.GetChildren().ToDictionary(x => x.Key, x => x.Value);
         }
 
+        
         Culture = CultureInfo.CurrentCulture;
 
         StateHasChanged();
     }
 
-    private Func<CultureInfo, string> convertFunc = ci => ci?.NativeName;
+    private Func<CultureInfo, string?> _convertFunc = ci => ci?.NativeName;
 
     private CultureInfo Culture
     {
         get => CultureInfo.CurrentCulture;
         set
         {
-            if (CultureInfo.CurrentCulture != value)
+            if (!CultureInfo.CurrentCulture.Equals(value))
             {
                 var uri = new Uri(NavigationManager.Uri).GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
                 var cultureEscapted = Uri.EscapeDataString(value.Name);
