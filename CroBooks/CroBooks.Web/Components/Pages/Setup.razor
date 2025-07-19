@@ -27,30 +27,20 @@
             }
             else
             {
-                //this should be removed in issue #2, currently is a possible breaking change
-                <EditForm Model="@_userRequest" OnValidSubmit="OnUserSubmit">
-                    <DataAnnotationsValidator />
-                    <MudCard>
-                        <MudCardHeader><MudText Typo="Typo.h5">@Localize("Setup_CreateAdmin")</MudText></MudCardHeader>
-                        <MudCardContent>
-                            <MudTextField Variant="Variant.Text" Label="@(LocalizeLabel(() => _userRequest.FirstName))" @bind-Value="_userRequest.FirstName" For="@(() => _userRequest.FirstName)"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.LastName))" @bind-Value="_userRequest.LastName" For="@(() => _userRequest.LastName)"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.Email))" @bind-Value="_userRequest.Email" For="@(() => _userRequest.Email)"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.Username))" @bind-Value="_userRequest.Username" For="@(() => _userRequest.Username)"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.Password))" @bind-Value="_userRequest.Password" For="@(() => _userRequest.Password)" InputType="InputType.Password"></MudTextField>
-                            <MudTextField Variant="Variant.Text" Class="mt-2" Label="@(LocalizeLabel(() => _userRequest.ConfirmPassword))" @bind-Value="_userRequest.ConfirmPassword" For="@(() => _userRequest.ConfirmPassword)" InputType="InputType.Password"></MudTextField>
-                        </MudCardContent>
-                        <MudCardActions>
-                            @if (_wizardStep == 0)
-                            {
-                                <MudSpacer />
-                                <SaveButton IsComponentBusy="ComponentBusy" SaveButtonClicked="OnUserSubmit" />
-                            }
-                        </MudCardActions>
-                    </MudCard>
-                </EditForm>
+                <MudCard>
+                    <MudCardHeader><MudText Typo="Typo.h5">@Localize("Setup_CreateAdmin")</MudText></MudCardHeader>
+                    <MudCardContent>
+                        <UserForm @ref="_userForm" UserRequest="_userRequest"></UserForm>
+                    </MudCardContent>
+                    <MudCardActions>
+                        @if (_wizardStep == 0)
+                        {
+                            <MudSpacer />
+                            <SaveButton IsComponentBusy="ComponentBusy" SaveButtonClicked="OnUserSubmit" />
+                        }
+                    </MudCardActions>
+                </MudCard>
             }
-
         </MudCarouselItem>
         <MudCarouselItem Transition="Transition.Slide">
             <MudCard>
@@ -77,9 +67,8 @@
     private CreateUserRequestDto _userRequest = new(roleId: 1);
     private CompanyDto _companyDto = new(isDefault: true);
     private CompanyForm _companyForm = null!;
+    private UserForm _userForm = null!;
     private int _wizardStep;
-    // bool _userInsertBusy;
-    // bool _companyInsertBusy;
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,6 +85,9 @@
 
     private async Task OnUserSubmit()
     {
+        if (!_userForm.Validate())
+            return;
+        
         ToggleBusy();
         var result = await UserHttpClient.SetupAdminUser(_userRequest);
         if (result != null)
