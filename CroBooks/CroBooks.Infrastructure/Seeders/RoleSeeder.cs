@@ -1,6 +1,5 @@
 ﻿using CroBooks.Domain.Interfaces;
 using CroBooks.Domain.Roles;
-using CroBooks.Infrastructure;
 
 namespace CroBooks.Infrastructure.Seeders
 {

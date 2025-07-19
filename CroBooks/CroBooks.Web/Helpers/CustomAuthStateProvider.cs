@@ -5,48 +5,41 @@ using System.Text.Json;
 
 namespace CroBooks.Web.Helpers
 {
-    public class CustomAuthStateProvider : AuthenticationStateProvider
+    public class CustomAuthStateProvider(ILocalStorageService localStorageService) : AuthenticationStateProvider
     {
-        private readonly ILocalStorageService localStorageService;
+        private readonly ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
 
-        private readonly ClaimsPrincipal anonymous = new(new ClaimsIdentity());
-
-        public CustomAuthStateProvider(ILocalStorageService localStorageService)
-        {
-            this.localStorageService = localStorageService;
-        }
-
-        public async override Task<AuthenticationState> GetAuthenticationStateAsync()
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             try
             {
                 var savedToken = await localStorageService.GetItemAsync<string>("token");
 
-                if (string.IsNullOrEmpty(savedToken))
+                if (savedToken != null && string.IsNullOrEmpty(savedToken))
                 {
                     await UpdateAuthenticationState(savedToken);
-                    return await Task.FromResult(new AuthenticationState(anonymous));
+                    return await Task.FromResult(new AuthenticationState(_anonymous));
                 }
 
                 if (string.IsNullOrEmpty(Constants.Token))
                 {
-                    Constants.Token = await localStorageService.GetItemAsync<string>("token");
+                    Constants.Token = await localStorageService.GetItemAsync<string>("token") ?? string.Empty;
                 }
 
                 if (string.IsNullOrEmpty(Constants.Token))
                 {
                     await UpdateAuthenticationState(Constants.Token);
-                    return await Task.FromResult(new AuthenticationState(anonymous));
+                    return await Task.FromResult(new AuthenticationState(_anonymous));
                 }
 
                 var claims = ParseClaimsFromJwt(Constants.Token);
                 // Checks the exp field of the token
-                var expiry = claims.Where(claim => claim.Type.Equals("exp")).FirstOrDefault();
+                var expiry = claims.ToArray().FirstOrDefault(claim => claim.Type.Equals("exp"));
                 if (expiry == null)
                 {
                     //UpdateAuthenticationState(Constants.Token);
-                    NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(anonymous)));
-                    return await Task.FromResult(new AuthenticationState(anonymous));
+                    NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_anonymous)));
+                    return await Task.FromResult(new AuthenticationState(_anonymous));
                 }
 
                 // The exp field is in Unix time
@@ -54,8 +47,8 @@ namespace CroBooks.Web.Helpers
                 if (datetime.UtcDateTime <= DateTime.UtcNow)
                 {
                     //UpdateAuthenticationState(Constants.Token);
-                    NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(anonymous)));
-                    return await Task.FromResult(new AuthenticationState(anonymous));
+                    NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_anonymous)));
+                    return await Task.FromResult(new AuthenticationState(_anonymous));
                 }
 
                 var authState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt")));
@@ -65,7 +58,7 @@ namespace CroBooks.Web.Helpers
             }
             catch (Exception)
             {
-                return await Task.FromResult(new AuthenticationState(anonymous));
+                return await Task.FromResult(new AuthenticationState(_anonymous));
             }
         }
 
@@ -91,11 +84,7 @@ namespace CroBooks.Web.Helpers
         {
             var authState = await GetAuthenticationStateAsync();
 
-            if (authState == null) return 0;
-
             var user = authState.User;
-
-            if (user == null) return 0;
 
             var id = user.FindFirst(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -106,29 +95,22 @@ namespace CroBooks.Web.Helpers
         {
             var authState = await GetAuthenticationStateAsync();
 
-            if (authState == null) return string.Empty;
-
             var user = authState.User;
 
-            if (user == null) return string.Empty;
-
             var username = user.FindFirst(x => x.Type == ClaimTypes.Name)?.Value;
-            return username;
+            
+            return username ?? string.Empty;
         }
 
         public async Task<string> GetUserRole()
         {
             var authState = await GetAuthenticationStateAsync();
 
-            if (authState == null) return string.Empty;
-
             var user = authState.User;
-
-            if (user == null) return string.Empty;
 
             var role = user.FindFirst(x => x.Type == ClaimTypes.Role)?.Value;
 
-            return role;
+            return role ?? string.Empty;
         }
 
         public async Task<string?> GetTokenAsync()
@@ -137,7 +119,7 @@ namespace CroBooks.Web.Helpers
             return token;
         }
 
-        public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+        private static List<Claim> ParseClaimsFromJwt(string jwt)
         {
             var payload = jwt.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);
@@ -145,10 +127,10 @@ namespace CroBooks.Web.Helpers
 
             if (keyValuePairs == null) return new List<Claim>();
 
-            return keyValuePairs.Select(x => new Claim(x.Key, x.Value.ToString()));
+            return keyValuePairs.Select(x => new Claim(x.Key, x.Value.ToString() ?? string.Empty)).ToList();
         }
 
-        public static byte[] ParseBase64WithoutPadding(string base64)
+        private static byte[] ParseBase64WithoutPadding(string base64)
         {
             switch (base64.Length % 4)
             {

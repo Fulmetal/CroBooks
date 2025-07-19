@@ -3,24 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CroBooks.Infrastructure.Repositories
 {
-    public class UserRepository : Repository<User, int>, IUserRepository
+    public class UserRepository(ApplicationDbContext context) : Repository<User, int>(context), IUserRepository
     {
-        private readonly ApplicationDbContext context;
-
-        public UserRepository(ApplicationDbContext context) : base(context)
-        {
-            this.context = context;
-        }
-
         public async Task<User?> GetUserByEmailOrUsername(string usernmaeOrEmail)
         {
-            var user = await this.SingleAsync(x => x.Email == usernmaeOrEmail || x.Username == usernmaeOrEmail);
+            var user = await SingleAsync(x => x.Email == usernmaeOrEmail || x.Username == usernmaeOrEmail);
             return user;
         }
 
         public async Task<bool> AdminExists()
         {
-            var result = await this.Queriable().Where(x => x.Role != null && x.Role.Name == "Admin").FirstOrDefaultAsync();
+            var result = await Queriable().Where(x => x.Role != null && x.Role.Name == "Admin").FirstOrDefaultAsync();
             return result != null;
         }
     }

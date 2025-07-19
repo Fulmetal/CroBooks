@@ -9,15 +9,15 @@
 <MudCalendar T="CalendarItem" ShowTodayButton="true" ShowWorkWeek="true" />
 
 @code {
-    [Inject] public HttpInterceptorService interceptor { get; set; } = null!;
+    [Inject] public HttpInterceptorService Interceptor { get; set; } = null!;
 
     protected override void OnInitialized()
     {
-        interceptor.RegisterEvent();
+        Interceptor.RegisterEvent();
     }
 
     public void Dispose()
     {
-        interceptor.DisposeEvent();
+        Interceptor.DisposeEvent();
     }
 }

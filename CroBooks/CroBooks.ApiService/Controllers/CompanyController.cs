@@ -16,13 +16,6 @@ namespace CroBooks.ApiService.Controllers
         public async Task<IActionResult> GetCompanies()
         {
             var result = await companyService.GetCompanies();
-            if (result == null)
-                return NotFound(new ProblemDetails
-                {
-                    Title = "Companies Not Found",
-                    Status = StatusCodes.Status404NotFound,
-                    Detail = $"No companies were found."
-                });
             return Ok(result);
         }
 
@@ -64,13 +57,6 @@ namespace CroBooks.ApiService.Controllers
         public async Task<IActionResult> AddCompany(CompanyDto dto)
         {
             var result = await companyService.AddCompany(dto);
-            if (result == null)
-                return NotFound(new ProblemDetails
-                {
-                    Title = "Company Not Found",
-                    Status = StatusCodes.Status404NotFound,
-                    Detail = $"Could not find company after insert."
-                });
             return Ok(result);
         }
 

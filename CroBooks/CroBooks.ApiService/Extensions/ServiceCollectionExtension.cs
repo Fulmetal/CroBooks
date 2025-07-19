@@ -10,6 +10,7 @@ using CroBooks.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.Data;
+using CroBooks.Domain.Roles;
 
 namespace CroBooks.ApiService.Extensions
 {
@@ -37,7 +38,7 @@ namespace CroBooks.ApiService.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Inject IDbConnection, with implementation from SqlConnection class.
-            services.AddScoped<IDbConnection>((sp) => new NpgsqlConnection(dbConnectionString));
+            services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(dbConnectionString));
 
             return services;
         }
@@ -55,6 +56,7 @@ namespace CroBooks.ApiService.Extensions
         {
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRolesRepository, RolesRepository>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
 

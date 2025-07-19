@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Net.Http.Json;
 
 namespace CroBooks.Web.HttpClients.Base
 {
@@ -12,39 +11,39 @@ namespace CroBooks.Web.HttpClients.Base
 
         public HttpClient HttpClient { get; }
 
-        public async Task<Tr> GetAsync<Tr>(string endpoint) where Tr : new()
+        public async Task<TR> GetAsync<TR>(string endpoint) where TR : new()
         {
             var response = await this.HttpClient.GetAsync(endpoint);
             response.EnsureSuccessStatusCode();
-            return await DeserializeResponse<Tr>(response);
+            return await DeserializeResponse<TR>(response);
         }
 
-        public async Task<Tr> GetAsync<T, Tr>(T dto, string endpoint) where Tr : new()
+        public async Task<TR> GetAsync<T, TR>(T dto, string endpoint) where TR : new()
         {
             var response = await this.HttpClient.PostAsJsonAsync(endpoint, dto);
             response.EnsureSuccessStatusCode();
-            return await DeserializeResponse<Tr>(response);
+            return await DeserializeResponse<TR>(response);
         }
 
-        public async Task<Tr> PostAsJsonAsync<T, Tr>(T dto, string endpoint) where Tr : new()
+        public async Task<TR> PostAsJsonAsync<T, TR>(T dto, string endpoint) where TR : new()
         {
             var response = await this.HttpClient.PostAsJsonAsync(endpoint, dto);
             response.EnsureSuccessStatusCode();
-            return await DeserializeResponse<Tr>(response);
+            return await DeserializeResponse<TR>(response);
         }
 
-        public async Task<Tr> PostAsync<Tr>(string endpoint) where Tr : new()
+        public async Task<TR> PostAsync<TR>(string endpoint) where TR : new()
         {
             var response = await this.HttpClient.PostAsync(endpoint, null);
             response.EnsureSuccessStatusCode();
-            return await DeserializeResponse<Tr>(response);
+            return await DeserializeResponse<TR>(response);
         }
 
-        public async Task<Tr> PutAsJsonAsync<T, Tr>(T dto, string endpoint) where Tr : new()
+        public async Task<TR> PutAsJsonAsync<T, TR>(T dto, string endpoint) where TR : new()
         {
             var response = await this.HttpClient.PutAsJsonAsync(endpoint, dto);
             response.EnsureSuccessStatusCode();
-            return await DeserializeResponse<Tr>(response);
+            return await DeserializeResponse<TR>(response);
         }
 
         public async Task PutAsync(string endpoint)
@@ -53,11 +52,11 @@ namespace CroBooks.Web.HttpClients.Base
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<Tr> PutAsync<Tr>(string endpoint) where Tr : new()
+        public async Task<TR> PutAsync<TR>(string endpoint) where TR : new()
         {
             var response = await this.HttpClient.PutAsync(endpoint, null);
             response.EnsureSuccessStatusCode();
-            return await DeserializeResponse<Tr>(response);
+            return await DeserializeResponse<TR>(response);
 
         }
 

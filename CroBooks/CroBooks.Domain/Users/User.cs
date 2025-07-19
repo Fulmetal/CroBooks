@@ -4,7 +4,7 @@ using CroBooks.Shared.Dto;
 
 namespace CroBooks.Domain.Users
 {
-    public class User : AuditEntity<int>
+    public sealed class User : AuditEntity<int>
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
@@ -22,11 +22,11 @@ namespace CroBooks.Domain.Users
 
         public User(UserDto dto)
         {
-            this.Id = dto.Id;
-            this.FirstName = dto.FirstName;
-            this.LastName = dto.LastName;
-            this.Username = dto.Username;
-            this.Email = dto.Email;
+            Id = dto.Id;
+            FirstName = dto.FirstName;
+            LastName = dto.LastName;
+            Username = dto.Username;
+            Email = dto.Email;
         }
 
         public UserDto ToDto()

@@ -15,13 +15,6 @@ namespace CroBooks.ApiService.Controllers
         public async Task<IActionResult> GetUsers()
         {
             var result = await userService.GetUsers();
-            if (result == null)
-                return NotFound(new ProblemDetails
-                {
-                    Title = "Users Not Found",
-                    Status = StatusCodes.Status404NotFound,
-                    Detail = $"No users were found."
-                });
             return Ok(result);
         }
 

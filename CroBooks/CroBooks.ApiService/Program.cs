@@ -5,15 +5,14 @@ using Scalar.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Everything",
-        builder =>
-        builder.AllowAnyOrigin()
+        cp =>
+        cp.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader());
 });

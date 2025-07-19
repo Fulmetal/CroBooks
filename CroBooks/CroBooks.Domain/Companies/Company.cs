@@ -1,18 +1,26 @@
-﻿using CroBooks.Domain.Base;
+﻿using System.ComponentModel.DataAnnotations;
+using CroBooks.Domain.Base;
 using CroBooks.Shared.Dto;
-using System.Runtime.CompilerServices;
 
 namespace CroBooks.Domain.Companies
 {
-    public class Company : AuditEntity<int>
+    public sealed class Company : AuditEntity<int>
     {
+        [StringLength(300)]
         public string Name { get; set; } = string.Empty;
+        [StringLength(300)]
         public string Address { get; set; } = string.Empty;
+        [StringLength(100)]
         public string PostalCode { get; set; } = string.Empty;
+        [StringLength(300)]
         public string City { get; set; } = string.Empty;
+        [StringLength(300)]
         public string Country { get; set; } = string.Empty;
+        [StringLength(100)]
         public string TaxNumber { get; set; } = string.Empty;
-        public string IBAN { get; set; } = string.Empty;
+        [StringLength(100)]
+        public string Iban { get; set; } = string.Empty;
+        [StringLength(300)]
         public string RegisteredActivity { get; set; } = string.Empty;
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
         public bool IsDefault { get; set; }
@@ -23,40 +31,40 @@ namespace CroBooks.Domain.Companies
 
         public Company(CompanyDto dto)
         {
-            this.Id = dto.Id;
-            this.Name = dto.Name;
-            this.Address = dto.Address;
-            this.PostalCode = dto.PostalCode;
-            this.City = dto.City;
-            this.Country = dto.Country;
-            this.TaxNumber = dto.TaxNumber;
-            this.IBAN = dto.IBAN;
-            this.RegisteredActivity = dto.RegisteredActivity;
-            if (dto.RegistrationDate != null) this.RegistrationDate = dto.RegistrationDate.Value.ToUniversalTime();
-            this.IsDefault = dto.IsDefault;
+            Id = dto.Id;
+            Name = dto.Name;
+            Address = dto.Address;
+            PostalCode = dto.PostalCode;
+            City = dto.City;
+            Country = dto.Country;
+            TaxNumber = dto.TaxNumber;
+            Iban = dto.Iban;
+            RegisteredActivity = dto.RegisteredActivity;
+            if (dto.RegistrationDate != null) RegistrationDate = dto.RegistrationDate.Value.ToUniversalTime();
+            IsDefault = dto.IsDefault;
         }
 
 
         public CompanyDto ToDto()
         {
             return new CompanyDto(id: this.Id, name: this.Name, address: this.Address, postalCode: this.PostalCode,
-                city: this.City, country: this.Country, taxNumber: this.TaxNumber, iban: this.IBAN,
+                city: this.City, country: this.Country, taxNumber: this.TaxNumber, iban: this.Iban,
                 registeredActivity: this.RegisteredActivity, registrationDate: this.RegistrationDate,
                 isDefault: this.IsDefault);
         }
 
-        public void UpdateFromDto(Company company, CompanyDto dto)
+        public static void UpdateFromDto(Company company, CompanyDto dto)
         {
-            this.Name = dto.Name;
-            this.Address = dto.Address;
-            this.PostalCode = dto.PostalCode;
-            this.City = dto.City;
-            this.Country = dto.Country;
-            this.TaxNumber = dto.TaxNumber;
-            this.IBAN = dto.IBAN;
-            this.RegisteredActivity = dto.RegisteredActivity;
-            this.RegistrationDate = dto.RegistrationDate.HasValue ? dto.RegistrationDate.Value.ToUniversalTime() : company.RegistrationDate;
-            this.IsDefault = dto.IsDefault;
+            company.Name = dto.Name;
+            company.Address = dto.Address;
+            company.PostalCode = dto.PostalCode;
+            company.City = dto.City;
+            company.Country = dto.Country;
+            company.TaxNumber = dto.TaxNumber;
+            company.Iban = dto.Iban;
+            company.RegisteredActivity = dto.RegisteredActivity;
+            company.RegistrationDate = dto.RegistrationDate.HasValue ? dto.RegistrationDate.Value.ToUniversalTime() : company.RegistrationDate;
+            company.IsDefault = dto.IsDefault;
         }
     }
 }

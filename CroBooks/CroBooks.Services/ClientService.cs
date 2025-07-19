@@ -33,7 +33,7 @@ namespace CroBooks.Services
             var client = await unitOfWork.Clients.FindAsync(dto.Id);
             if (client == null)
                 return null;
-            client.UpdateFromDto(client, dto);
+            Client.UpdateFromDto(client, dto);
             await unitOfWork.Clients.UpdateAsync(client);
             await unitOfWork.CommitAsync();
             return client.ToDto();

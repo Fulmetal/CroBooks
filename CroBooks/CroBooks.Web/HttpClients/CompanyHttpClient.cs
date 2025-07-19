@@ -3,42 +3,38 @@ using CroBooks.Web.HttpClients.Base;
 
 namespace CroBooks.Web.HttpClients
 {
-    public class CompanyHttpClient : ApiHttpClientBase
+    public class CompanyHttpClient(HttpClient httpClient) : ApiHttpClientBase(httpClient)
     {
-        public const string controllerBase = "/api/company";
-
-        public CompanyHttpClient(HttpClient httpClient) : base(httpClient)
-        {
-        }
+        private const string ControllerBase = "/api/company";
 
         public async Task<CompanyDto> GetCompany(int id)
         {
-            return await GetAsync<CompanyDto>($"{controllerBase}/{id}");
+            return await GetAsync<CompanyDto>($"{ControllerBase}/{id}");
         }
 
         public async Task<CompanyDto> GetDefaultCompany()
         {
-            return await GetAsync<CompanyDto>($"{controllerBase}/default");
+            return await GetAsync<CompanyDto>($"{ControllerBase}/default");
         }
 
         public async Task<List<CompanyDto>> GetCompanies()
         {
-            return await GetAsync<List<CompanyDto>>($"{controllerBase}/");
+            return await GetAsync<List<CompanyDto>>($"{ControllerBase}/");
         }
 
         public async Task<CompanyDto> AddCompany(CompanyDto dto)
         {
-            return await PostAsJsonAsync<CompanyDto, CompanyDto>(dto, $"{controllerBase}/");
+            return await PostAsJsonAsync<CompanyDto, CompanyDto>(dto, $"{ControllerBase}/");
         }
 
         public async Task<CompanyDto> UpdateCompany(CompanyDto dto)
         {
-            return await PutAsJsonAsync<CompanyDto, CompanyDto>(dto, $"{controllerBase}/");
+            return await PutAsJsonAsync<CompanyDto, CompanyDto>(dto, $"{ControllerBase}/");
         }
 
         public async Task<bool> CheckAnyCompanyExists()
         {
-            return await GetAsync<bool>($"{controllerBase}/anycompanyexists");
+            return await GetAsync<bool>($"{ControllerBase}/anycompanyexists");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace EduPortal.Shared.Exceptions
+﻿namespace CroBooks.Shared.Exceptions
 {
     public class ProblemDetails
     {

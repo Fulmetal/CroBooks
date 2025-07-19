@@ -1,29 +1,22 @@
 ﻿using CroBooks.Shared.Dto.Request;
 using CroBooks.Shared.Dto.Response;
 using CroBooks.Web.HttpClients.Base;
-using Blazored.LocalStorage;
 
 namespace CroBooks.Web.HttpClients
 {
-    public class AuthHttpClient : ApiHttpClientBase
+    public class AuthHttpClient(HttpClient httpClient) : ApiHttpClientBase(httpClient)
     {
-        public const string controllerBase = "/api/auth";
-        private readonly HttpClient httpClient;
-
-        public AuthHttpClient(HttpClient httpClient) : base(httpClient)
-        {
-            this.httpClient = httpClient;
-        }
+        private const string ControllerBase = "/api/auth";
 
         public async Task<LoginResponseDto> Login(LoginRequestDto dto)
         {
-            var response = await PostAsJsonAsync<LoginRequestDto, LoginResponseDto>(dto, $"{controllerBase}/login");
+            var response = await PostAsJsonAsync<LoginRequestDto, LoginResponseDto>(dto, $"{ControllerBase}/login");
             return response;
         }
 
         public async Task<LoginResponseDto> Logout(LoginRequestDto dto)
         {
-            return await PostAsJsonAsync<LoginRequestDto, LoginResponseDto>(dto, $"{controllerBase}/logout");
+            return await PostAsJsonAsync<LoginRequestDto, LoginResponseDto>(dto, $"{ControllerBase}/logout");
         }
 
     }

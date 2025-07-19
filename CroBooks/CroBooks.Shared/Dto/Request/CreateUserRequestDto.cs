@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace CroBooks.Shared.Dto.Request
+﻿namespace CroBooks.Shared.Dto.Request
 {
     public class CreateUserRequestDto
     {

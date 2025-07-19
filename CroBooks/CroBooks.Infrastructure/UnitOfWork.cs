@@ -11,22 +11,22 @@ namespace CroBooks.Infrastructure
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        private CompanyRepository _companyRepository = default!;
-        private UserRepository userRepository = default!;
-        private RolesRepository roleRepository = default!;
-        private ClientRepository clientRepository = default!;
-        private ContactRepository contactRepository = default!;
+        private CompanyRepository _companyRepository;
+        private UserRepository _userRepository;
+        private RolesRepository _roleRepository;
+        private ClientRepository _clientRepository;
+        private ContactRepository _contactRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public ICompanyRepository Companies => _companyRepository ??= new CompanyRepository(_context);
-        public IUserRepository Users => userRepository ??= new UserRepository(_context);
-        public IRolesRepository Roles => roleRepository ??= new RolesRepository(_context);
-        public IClientRepository Clients => clientRepository ??= new ClientRepository(_context);
-        public IContactRepository Contacts => contactRepository ??= new ContactRepository(_context);
+        public ICompanyRepository Companies => _companyRepository ?? new CompanyRepository(_context);
+        public IUserRepository Users => _userRepository ?? new UserRepository(_context);
+        public IRolesRepository Roles => _roleRepository ?? new RolesRepository(_context);
+        public IClientRepository Clients => _clientRepository ?? new ClientRepository(_context);
+        public IContactRepository Contacts => _contactRepository ?? new ContactRepository(_context);
 
         public async Task<int> CommitAsync()
         {
