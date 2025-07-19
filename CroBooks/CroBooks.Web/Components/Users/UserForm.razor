@@ -1,0 +1,46 @@
+@using CroBooks.Shared.Dto.Request
+
+@inherits AppComponentBase
+
+<MudForm @ref="_form" @bind-IsValid="@_success" @bind-Errors="@_errors">
+    <MudTextField Variant="Variant.Text" Required="true" Label="@(LocalizeLabel(() => UserRequest.FirstName))"
+                  @bind-Value="UserRequest.FirstName" For="@(() => UserRequest.FirstName)"></MudTextField>
+    <MudTextField Variant="Variant.Text" Required="true" Label="@(LocalizeLabel(() => UserRequest.LastName))"
+                  @bind-Value="UserRequest.LastName" For="@(() => UserRequest.LastName)"></MudTextField>
+    <MudTextField Variant="Variant.Text" Required="true" Label="@(LocalizeLabel(() => UserRequest.Email))"
+                  @bind-Value="UserRequest.Email" For="@(() => UserRequest.Email)"></MudTextField>
+    <MudTextField Variant="Variant.Text" Required="true" Label="@(LocalizeLabel(() => UserRequest.Username))"
+                  @bind-Value="UserRequest.Username" For="@(() => UserRequest.Username)"></MudTextField>
+    <MudTextField @ref="_passwordField" Variant="Variant.Text" Required="true" Label="@(LocalizeLabel(() => UserRequest.Password))"
+                  @bind-Value="UserRequest.Password" For="@(() => UserRequest.Password)" 
+                  InputType="InputType.Password"></MudTextField>
+    <MudTextField Variant="Variant.Text" Required="true" Label="@(LocalizeLabel(() => UserRequest.ConfirmPassword))"
+                  @bind-Value="UserRequest.ConfirmPassword" For="@(() => UserRequest.ConfirmPassword)" 
+                  Validation="@(new Func<string, string>(PasswordMatch))"
+                  InputType="InputType.Password"></MudTextField>
+</MudForm>
+
+@code {
+
+    [Parameter] public required CreateUserRequestDto UserRequest { get; set; }
+
+    private MudTextField<string> _passwordField = null!;
+
+    bool _success;
+    string[] _errors = [];
+    MudForm _form = null!;
+
+    public bool Validate()
+    {
+        _form.Validate();
+        return _success;
+    }
+    
+    private string PasswordMatch(string arg)
+    {
+        if (_passwordField.Value != arg)
+            return "Passwords don't match";
+        return null;
+    }
+
+}
