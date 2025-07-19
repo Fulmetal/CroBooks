@@ -1,7 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using CroBooks.Shared.Enums;
 using CroBooks.Shared.Exceptions;
-using EduPortal.Shared.Exceptions;
 using MudBlazor;
 using System.Net;
 using System.Net.Http.Headers;
@@ -12,8 +11,8 @@ namespace CroBooks.Web.Helpers;
 public class HttpInterceptorService
 {
     private readonly HttpClientInterceptor _interceptor;
-    private readonly CustomAuthStateProvider customAuthStateProvider;
-    private readonly ILocalStorageService localStorageService;
+    private readonly CustomAuthStateProvider _customAuthStateProvider;
+    private readonly ILocalStorageService _localStorageService;
     private readonly ISnackbar _snackbar;
 
     public HttpInterceptorService(HttpClientInterceptor interceptor,
@@ -22,8 +21,8 @@ public class HttpInterceptorService
         ISnackbar snackbar)
     {
         _interceptor = interceptor;
-        this.customAuthStateProvider = customAuthStateProvider;
-        this.localStorageService = localStorageService;
+        this._customAuthStateProvider = customAuthStateProvider;
+        this._localStorageService = localStorageService;
         _snackbar = snackbar;
     }
 
@@ -37,7 +36,7 @@ public class HttpInterceptorService
     {
         try
         {
-            var token = await localStorageService.GetItemAsync<string>("token");
+            var token = await _localStorageService.GetItemAsync<string>("token");
             if (string.IsNullOrEmpty(token)) return;
             var authHeader = e.Request.Headers.FirstOrDefault(x => x.Key == "Authorization");
             if (authHeader.Key == null)
@@ -45,9 +44,8 @@ public class HttpInterceptorService
             if (authHeader.Key == "Autrhorization")
                 e.Request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-
             throw;
         }
     }
@@ -63,7 +61,7 @@ public class HttpInterceptorService
         if (e.Response.IsSuccessStatusCode) return;
         if (e.Response.StatusCode == HttpStatusCode.Unauthorized)
         {
-            HandleUnsuccessfulResponse((HttpStatusCode)e.Response.StatusCode);
+            HandleUnsuccessfulResponse(e.Response.StatusCode);
             return;
         }
 
@@ -72,7 +70,7 @@ public class HttpInterceptorService
         if (problemDetails == null) return;
 
         var statusCode = problemDetails.Status;
-        if (problemDetails.Type != null && problemDetails.Type == "SafeDisplayException")
+        if (problemDetails.Type == "SafeDisplayException")
         {
             ThrowExceptionWithNotification(ErrorTypes.SafeDisplayException, problemDetails.Detail, (Severity)problemDetails.SafeDisplayExceptionType);
         }
@@ -108,7 +106,7 @@ public class HttpInterceptorService
                     Severity.Warning);
                 break;
             case HttpStatusCode.Unauthorized:
-                customAuthStateProvider.GetAuthenticationStateAsync().Wait();
+                _customAuthStateProvider.GetAuthenticationStateAsync().Wait();
                 ThrowExceptionWithNotification(ErrorTypes.Unauthorized,
                     "User is not authorized to access desired resource.", Severity.Warning);
                 break;

@@ -17,13 +17,6 @@ namespace CroBooks.ApiService.Controllers
         public async Task<IActionResult> GetClients()
         {
             var result = await clientService.GetClients();
-            if (result == null)
-                return NotFound(new ProblemDetails
-                {
-                    Title = "Clients Not Found",
-                    Status = StatusCodes.Status404NotFound,
-                    Detail = $"No clients were found."
-                });
             return Ok(result);
         }
 
@@ -50,13 +43,6 @@ namespace CroBooks.ApiService.Controllers
         public async Task<IActionResult> AddClient(ClientDto dto)
         {
             var result = await clientService.AddClient(dto);
-            if (result == null)
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "Cannot add this client.",
-                    Status = StatusCodes.Status400BadRequest,
-                    Detail = $"Cannot add this client."
-                });
             return Ok(result);
         }
 

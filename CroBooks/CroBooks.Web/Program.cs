@@ -4,7 +4,6 @@ using CroBooks.Web.Extensions;
 using CroBooks.Web.Helpers;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor.Services;
-using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 

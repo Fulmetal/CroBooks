@@ -16,7 +16,7 @@
                   InputType="InputType.Password"></MudTextField>
     <MudTextField Variant="Variant.Text" Required="true" Label="@(LocalizeLabel(() => UserRequest.ConfirmPassword))"
                   @bind-Value="UserRequest.ConfirmPassword" For="@(() => UserRequest.ConfirmPassword)" 
-                  Validation="@(new Func<string, string>(PasswordMatch))"
+                  Validation="@(new Func<string, string?>(PasswordMatch))"
                   InputType="InputType.Password"></MudTextField>
 </MudForm>
 
@@ -36,7 +36,7 @@
         return _success;
     }
     
-    private string PasswordMatch(string arg)
+    private string? PasswordMatch(string arg)
     {
         if (_passwordField.Value != arg)
             return "Passwords don't match";

@@ -1,4 +1,6 @@
-﻿namespace CroBooks.Shared.Dto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CroBooks.Shared.Dto
 {
     public class CompanyDto
     {
@@ -20,21 +22,30 @@
             City = city;
             Country = country;
             TaxNumber = taxNumber;
-            IBAN = iban;
+            Iban = iban;
             RegisteredActivity = registeredActivity;
             RegistrationDate = registrationDate;
             IsDefault = isDefault;
         }
 
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; } = string.Empty;
+        [Required]
         public string Address { get; set; } = string.Empty;
+        [Required]
         public string PostalCode { get; set; } = string.Empty;
+        [Required]
         public string City { get; set; } = string.Empty;
+        [Required]
         public string Country { get; set; } = string.Empty;
+        [Required]
         public string TaxNumber { get; set; } = string.Empty;
-        public string IBAN { get; set; } = string.Empty;
+        [Required]
+        public string Iban { get; set; } = string.Empty;
+        [Required]
         public string RegisteredActivity { get; set; } = string.Empty;
+        [Required]
         public DateTime? RegistrationDate { get; set; } = DateTime.Now;
         public bool IsDefault { get; set; }
     }

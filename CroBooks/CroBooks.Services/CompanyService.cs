@@ -47,7 +47,7 @@ namespace CroBooks.Services
             var company = await unitOfWork.Companies.FindAsync(dto.Id);
             if (company == null)
                 return null;
-            company.UpdateFromDto(company, dto);
+            Company.UpdateFromDto(company, dto);
             await unitOfWork.Companies.UpdateAsync(company);
             await unitOfWork.CommitAsync();
 

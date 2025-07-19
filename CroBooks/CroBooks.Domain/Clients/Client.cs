@@ -1,19 +1,29 @@
-﻿using CroBooks.Domain.Base;
+﻿using System.ComponentModel.DataAnnotations;
+using CroBooks.Domain.Base;
 using CroBooks.Domain.Contacts;
 using CroBooks.Shared.Dto;
 
 namespace CroBooks.Domain.Clients
 {
-    public class Client : AuditEntity<int>
+    public sealed class Client : AuditEntity<int>
     {
+        [StringLength(300)]
         public string Name { get; set; } = string.Empty;
+        [StringLength(300)]
         public string Email { get; set; } = string.Empty;
+        [StringLength(50)]
         public string Phone { get; set; } = string.Empty;
+        [StringLength(300)]
         public string Address { get; set; } = string.Empty;
+        [StringLength(300)]
         public string City { get; set; } = string.Empty;
+        [StringLength(100)]
         public string PostalCode { get; set; } = string.Empty;
+        [StringLength(200)]
         public string Country { get; set; } = string.Empty;
+        [StringLength(100)]
         public string TaxNumber { get; set; } = string.Empty;
+        [StringLength(2000)]
         public string Note { get; set; } = string.Empty;
         public List<Contact> Contacts { get; set; } = new List<Contact>();
 
@@ -23,16 +33,16 @@ namespace CroBooks.Domain.Clients
 
         public Client(ClientDto dto)
         {
-            this.Id = dto.Id;
-            this.Name = dto.Name;
-            this.Email = dto.Email;
-            this.Phone = dto.Phone;
-            this.Address = dto.Address;
-            this.City = dto.City;
-            this.PostalCode = dto.PostalCode;
-            this.Country = dto.Country;
-            this.TaxNumber = dto.TaxNumber;
-            this.Note = dto.Note;
+            Id = dto.Id;
+            Name = dto.Name;
+            Email = dto.Email;
+            Phone = dto.Phone;
+            Address = dto.Address;
+            City = dto.City;
+            PostalCode = dto.PostalCode;
+            Country = dto.Country;
+            TaxNumber = dto.TaxNumber;
+            Note = dto.Note;
         }
 
 
@@ -40,30 +50,30 @@ namespace CroBooks.Domain.Clients
         {
             return new ClientDto
             {
-                Id = this.Id,
-                Name = this.Name,
-                Email = this.Email,
-                Phone = this.Phone,
-                Address = this.Address,
-                PostalCode = this.PostalCode,
-                City = this.City,
-                Country = this.Country,
-                TaxNumber = this.TaxNumber,
-                Note = this.Note
+                Id = Id,
+                Name = Name,
+                Email = Email,
+                Phone = Phone,
+                Address = Address,
+                PostalCode = PostalCode,
+                City = City,
+                Country = Country,
+                TaxNumber = TaxNumber,
+                Note = Note
             };
         }
 
-        public void UpdateFromDto(Client client, ClientDto dto)
+        public static void UpdateFromDto(Client client, ClientDto dto)
         {
-            this.Name = dto.Name;
-            this.Email = dto.Email;
-            this.Phone = dto.Phone;
-            this.Address = dto.Address;
-            this.PostalCode = dto.PostalCode;
-            this.City = dto.City;
-            this.Country = dto.Country;
-            this.TaxNumber = dto.TaxNumber;
-            this.Note = dto.Note;
+            client.Name = dto.Name;
+            client.Email = dto.Email;
+            client.Phone = dto.Phone;
+            client.Address = dto.Address;
+            client.PostalCode = dto.PostalCode;
+            client.City = dto.City;
+            client.Country = dto.Country;
+            client.TaxNumber = dto.TaxNumber;
+            client.Note = dto.Note;
         }
     }
 }

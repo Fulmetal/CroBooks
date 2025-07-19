@@ -10,7 +10,7 @@ var apiService = builder.AddProject<Projects.CroBooks_ApiService>("ApiService")
     .WaitFor(postgres)
     .WaitFor(postgresdb);
 
-var web = builder.AddProject<Projects.CroBooks_Web>("Web")
+var _ = builder.AddProject<Projects.CroBooks_Web>("Web")
     .WithExternalHttpEndpoints()
     .WithReference(apiService)
     .WaitFor(apiService);

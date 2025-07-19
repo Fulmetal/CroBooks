@@ -3,25 +3,24 @@ using CroBooks.Web.Resources;
 using CroBooks.Web.Resources.Elements;
 using CroBooks.Web.Resources.Models;
 using Microsoft.Extensions.Localization;
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
 namespace CroBooks.Web.Helpers
 {
     public class TranslationHelper
     {
-        private readonly IStringLocalizer<ModelResource> modelLocalizer;
-        private readonly IStringLocalizer<AppResource> appLocalizer;
-        private readonly IStringLocalizer<ElementResource> elementLocalizer;
+        private readonly IStringLocalizer<ModelResource> _modelLocalizer;
+        private readonly IStringLocalizer<AppResource> _appLocalizer;
+        private readonly IStringLocalizer<ElementResource> _elementLocalizer;
 
         public TranslationHelper(IStringLocalizer<ModelResource> modelLocalizer
             , IStringLocalizer<AppResource> appLocalizer
             , IStringLocalizer<ElementResource> elementLocalizer
             )
         {
-            this.modelLocalizer = modelLocalizer;
-            this.appLocalizer = appLocalizer;
-            this.elementLocalizer = elementLocalizer;
+            this._modelLocalizer = modelLocalizer;
+            this._appLocalizer = appLocalizer;
+            this._elementLocalizer = elementLocalizer;
         }
         public string GetModelLabelTranslation<T>(Expression<Func<T>> propertyExpression)
         {
@@ -29,19 +28,19 @@ namespace CroBooks.Web.Helpers
             {
                 var propertyName = memberExpression.Member.Name;
 
-                var translation = modelLocalizer[propertyName];
+                var translation = _modelLocalizer[propertyName];
                 if (translation.ResourceNotFound)
                 {
                     return $"TNF: {propertyName}";
                 }
 
-                var requiredAttribute = memberExpression.Member.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault();
-
-                if (requiredAttribute != null)
-                {
-                    var mandatoryString = translation.Value;
-                    return mandatoryString += "*";
-                }
+                // var requiredAttribute = memberExpression.Member.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault();
+                //
+                // if (requiredAttribute != null)
+                // {
+                //     var mandatoryString = translation.Value;
+                //     return mandatoryString += "*";
+                // }
 
                 return translation;
             }
@@ -50,7 +49,7 @@ namespace CroBooks.Web.Helpers
 
         public string GetAppTranslation(string key)
         {
-            var translation = appLocalizer[key];
+            var translation = _appLocalizer[key];
             if (translation.ResourceNotFound)
             {
                 return $"TNF: {key}";
@@ -60,7 +59,7 @@ namespace CroBooks.Web.Helpers
 
         public string GetElementTranslation(string key)
         {
-            var translation = elementLocalizer[key];
+            var translation = _elementLocalizer[key];
             if (translation.ResourceNotFound)
             {
                 return $"TNF: {key}";

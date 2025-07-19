@@ -12,7 +12,7 @@ namespace CroBooks.Shared.ValidationAttributes
             }
             // return true if value is a non-null number > 0, otherwise return false
             decimal i;
-            var isValid = value != null && decimal.TryParse(value.ToString(), out i) && i > 0;
+            var isValid = decimal.TryParse(value.ToString(), out i) && i > 0;
 
             if (!isValid)
                 return new ValidationResult($"The field {validationContext.DisplayName} must be greater than 0");

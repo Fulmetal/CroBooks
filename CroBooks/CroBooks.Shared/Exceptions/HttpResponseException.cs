@@ -29,6 +29,7 @@ public class HttpResponseException : Exception
         ErrorType = errorType;
     }
 
+    [Obsolete("Obsolete")]
     protected HttpResponseException(SerializationInfo info, StreamingContext context, ErrorTypes errorType)
         : base(info, context)
     {

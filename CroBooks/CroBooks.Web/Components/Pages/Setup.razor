@@ -90,7 +90,7 @@
         
         ToggleBusy();
         var result = await UserHttpClient.SetupAdminUser(_userRequest);
-        if (result != null)
+        if (!string.IsNullOrEmpty(result.Username))
         {
             _adminExists = true;
             WizardNextStep();
@@ -105,7 +105,7 @@
         
         ToggleBusy();
         var result = await CompanyHttpClient.AddCompany(_companyDto);
-        if (result != null)
+        if (!string.IsNullOrEmpty(result.Name))
         {
             _companyExists = true;
             WizardNextStep();

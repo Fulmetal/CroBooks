@@ -24,15 +24,15 @@
     <MudAppBar Elevation="1">
         <AuthorizeView>
             <Authorized>
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(_ => DrawerToggle())" />
             </Authorized>
         </AuthorizeView>
         <MudText Typo="Typo.h5" Class="ml-3">Cro Books</MudText>
         <MudSpacer />
         <CultureSelector />
         <MudSwitch T="bool" Value="_isDarkMode" ValueChanged="@((e) => ToggleDarkMode(e))"
-        ThumbIcon="@(_isDarkMode == true ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
-        ThumbIconColor="@(_isDarkMode == true ? Color.Dark : Color.Dark)"
+        ThumbIcon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
+        ThumbIconColor="@(Color.Dark)"
         Color="Color.Primary">
         </MudSwitch>
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
@@ -68,7 +68,7 @@
     {
         var state = await AuthStatProvider.GetAuthenticationStateAsync();
         
-        if (state.User == null || state.User.Identity == null || state.User.Identity.IsAuthenticated == false)
+        if (state.User.Identity == null || state.User.Identity.IsAuthenticated == false)
         {
             NavigationManager.NavigateTo("/login");
         }

@@ -1,32 +1,17 @@
 ﻿using CroBooks.Domain.Base;
 using CroBooks.Domain.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 using System.Linq.Expressions;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components;
 
 namespace CroBooks.Infrastructure;
 
 public class Repository<T, TKey> : IRepository<T, TKey> where T : class
 {
-    protected readonly ApplicationDbContext _context;
-    private readonly AuthenticationStateProvider _authenticationStateProvider;
-    private DbSet<T> _dbSet;
+    private readonly DbSet<T> _dbSet;
 
-    public Repository(ApplicationDbContext context, AuthenticationStateProvider authenticationStateProvider)
+    protected Repository(ApplicationDbContext context)
     {
-        _context = context;
-        _dbSet = _context.Set<T>();
-        _authenticationStateProvider = authenticationStateProvider;
-    }
-
-    public Repository(ApplicationDbContext context)
-    {
-        _context = context;
-        _dbSet = _context.Set<T>();
+        _dbSet = context.Set<T>();
     }
 
     public async Task<T> AttachAsync(T entity)

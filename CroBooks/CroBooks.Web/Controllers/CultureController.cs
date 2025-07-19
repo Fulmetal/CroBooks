@@ -9,7 +9,7 @@ namespace CroBooks.Web.Controllers
         [HttpGet("set")]
         public IActionResult Set(string culture, string returnUrl)
         {
-            if (culture != null)
+            if (!string.IsNullOrEmpty(culture))
             {
                 var requestCulture = new RequestCulture(culture, culture);
                 //override culture currency to use euro symbol
