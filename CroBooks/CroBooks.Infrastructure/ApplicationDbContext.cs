@@ -1,4 +1,5 @@
 ﻿using CroBooks.Domain.Clients;
+using CroBooks.Domain.CodeBooks;
 using CroBooks.Domain.Companies;
 using CroBooks.Domain.Contacts;
 using CroBooks.Domain.Roles;
@@ -19,5 +20,6 @@ namespace CroBooks.Infrastructure
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Client> Clients { get; set; } = null!;
         public DbSet<Contact> Contacts { get; set; } = null!;
+        public DbSet<AddressType> AddressTypes { get; set; } = null!;
     }
 }

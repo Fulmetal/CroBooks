@@ -2,10 +2,5 @@
 
 namespace CroBooks.Infrastructure.Repositories
 {
-    public class ClientRepository : Repository<Client, int>, IClientRepository
-    {
-        public ClientRepository(ApplicationDbContext context) : base(context)
-        {
-        }
-    }
+    public class ClientRepository(ApplicationDbContext context) : Repository<Client, int>(context), IClientRepository;
 }
